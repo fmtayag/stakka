@@ -1,15 +1,11 @@
 # ⬛⬜
 
 import copy
-from enum import Enum
 import pygame, time
 from pygame import Vector2 as Vec2
 
-AIR = 0
-BLOCK = 1
-PLACED = 2
-GRID_WIDTH = 10
-GRID_HEIGHT = 20
+from constants import AIR, BLOCK, GRID_HEIGHT, GRID_WIDTH, PLACED
+from tetros import TetroJ, TetroT
 
 pygame.init()
 
@@ -49,87 +45,6 @@ def display_grid_visual(screen: pygame.Surface, grid):
             ver_grid += 1
 
         y += 18
-
-class Rotation(Enum):
-    LEFT=0
-    TOP=1
-    RIGHT=2
-    BOTTOM=3
-
-class TetroT:
-    def __init__(self, pos):
-        self.position = pos
-        self.rotation = Rotation.BOTTOM
-    
-    def get_blocks(self, rotation: Rotation):
-        if rotation == Rotation.LEFT:
-            return [
-                [0, 0], # Origin block
-                [-1, 0],
-                [0, -1],
-                [0, 1]
-            ]
-        elif rotation == Rotation.TOP:
-            return [
-                [0, 0], # Origin block
-                [0, -1],
-                [1, 0],
-                [-1, 0]
-            ]
-        elif rotation == Rotation.RIGHT:
-            return [
-                [0, 0], # Origin block
-                [1, 0],
-                [0, -1],
-                [0, 1]
-            ]
-        elif rotation == Rotation.BOTTOM:
-            return [
-                [0, 0], # Origin block
-                [0, 1],
-                [1, 0],
-                [-1, 0]
-            ]
-        
-    def rotate(self):
-        new_rot = None
-        match self.rotation:
-            case Rotation.LEFT:
-                new_rot = Rotation.TOP 
-            case Rotation.TOP:
-                new_rot = Rotation.RIGHT
-            case Rotation.RIGHT:
-                new_rot = Rotation.BOTTOM
-            case Rotation.BOTTOM:
-                new_rot = Rotation.LEFT
-
-        # TODO: allow wall kicks
-        blocks = self.get_blocks(new_rot)
-        is_blocked = False
-        for block in blocks:
-            bx = self.position[0] + block[0]
-            by = self.position[1] + block[1]
-            # -- Check if block in new pos will hit wall
-            if (
-                bx < 0 or bx > GRID_WIDTH-1 or 
-                by < 0 or by > GRID_HEIGHT-1
-            ):
-                is_blocked = True
-                break
-
-            # -- Check if block in new pos will hit already placed blocks
-            try:
-                if grid[by][bx] == PLACED:
-                    is_blocked = True
-                    break
-            except:
-                # This is a bit hacky but screw it
-                is_blocked = True
-                break
-
-        # -- Allow rotate if all is good
-        if not is_blocked:
-            self.rotation = new_rot
 
 def dbg_move(grid, tetro: TetroT, move):
     # TODO: Check if tetro is not blocked, if not then return the new grid
@@ -173,7 +88,6 @@ def dbg_move(grid, tetro: TetroT, move):
         return grid
 
 
-
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Tetris Clone")
 running = True
@@ -189,7 +103,7 @@ grid[3][1] = PLACED
 grid[5][2] = PLACED
 grid[5][3] = PLACED
 
-dbg_tetro = TetroT([2, 2]) # Debug tetro 
+dbg_tetro = TetroJ([2, 2]) # Debug tetro 
 
 while running:
     clock.tick(FPS)
@@ -209,7 +123,7 @@ while running:
             elif event.key == pygame.K_DOWN:
                 new_pos[1] = 1
             elif event.key == pygame.K_r:
-                dbg_tetro.rotate()
+                dbg_tetro.rotate(grid)
     
     # Process
     refresh_grid(grid)
