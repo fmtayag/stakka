@@ -111,8 +111,8 @@ class TetroT:
             by = self.position[1] + block[1]
             # -- Check if block in new pos will hit wall
             if (
-                bx <= 0 or bx > GRID_WIDTH-1 or 
-                by <= 0 or by > GRID_HEIGHT-1
+                bx < 0 or bx > GRID_WIDTH-1 or 
+                by < 0 or by > GRID_HEIGHT-1
             ):
                 is_blocked = True
                 break
