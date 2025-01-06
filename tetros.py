@@ -19,30 +19,29 @@ class TetroJ:
                 [0, 0], # Origin block
                 [-1, 0],
                 [-2, 0],
-                [0, -1]
+                [0, 1]
             ]
         elif rotation == Rotation.TOP:
             return [
-                [0, 0], # Origin block
-                [0, -1],
-                [0, -2],
-                [1, 0]
+                [-1, 1], # Origin block
+                [-1, 0],
+                [-1, -1],
+                [-2, 1]
             ]
         elif rotation == Rotation.RIGHT:
             return [
-                [0, 0], # Origin block
-                [1, 0],
-                [2, 0],
-                [0, 1]
+                [-2, 1], # Origin block
+                [-1, 1],
+                [0, 1],
+                [-2, 0]
             ]
         elif rotation == Rotation.BOTTOM:
             return [
-                [0, 0], # Origin block
-                [0, 1],
-                [0, 2],
-                [-1, 0]
+                [-1, -1], # Origin block
+                [-1, 0],
+                [-1, 1],
+                [0, -1]
             ]
-            
 
     def rotate(self, grid):
         new_rot = None
@@ -100,9 +99,9 @@ class TetroT:
         elif rotation == Rotation.TOP:
             return [
                 [0, 0], # Origin block
-                [0, -1],
-                [1, 0],
-                [-1, 0]
+                [0, 1],
+                [1, 1],
+                [-1, 1]
             ]
         elif rotation == Rotation.RIGHT:
             return [
