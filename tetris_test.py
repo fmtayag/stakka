@@ -5,7 +5,7 @@ import pygame, time
 from pygame import Vector2 as Vec2
 
 from constants import AIR, BLOCK, GRID_HEIGHT, GRID_WIDTH, PLACED
-from tetros import TetroJ, TetroT
+from tetros import Tetro, TetroJ, TetroT
 
 pygame.init()
 
@@ -46,7 +46,7 @@ def display_grid_visual(screen: pygame.Surface, grid):
 
         y += 18
 
-def dbg_move(grid, tetro: TetroT, move):
+def dbg_move(grid, tetro: Tetro, move):
     # TODO: Check if tetro is not blocked, if not then return the new grid
     newx = tetro.position[0] + move[0]
     newy = tetro.position[1] + move[1]
@@ -103,7 +103,7 @@ grid[3][1] = PLACED
 grid[5][2] = PLACED
 grid[5][3] = PLACED
 
-dbg_tetro = TetroJ([2, 2]) # Debug tetro 
+dbg_tetro = TetroT([2, 2]) # Debug tetro 
 
 while running:
     clock.tick(FPS)
