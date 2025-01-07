@@ -5,7 +5,7 @@ import pygame, time
 from pygame import Vector2 as Vec2
 
 from constants import AIR, BLOCK, GRID_HEIGHT, GRID_WIDTH, PLACED
-from tetros import Tetro, TetroJ, TetroT
+from tetros import Tetro, TetroCircle, TetroI, TetroJ, TetroL, TetroS, TetroT, TetroZ
 
 pygame.init()
 
@@ -98,7 +98,7 @@ grid[5][2] = PLACED
 grid[5][3] = PLACED
 
 # dbg_tetro = TetroT([1, 4]) # Debug tetro 
-dbg_tetro = TetroT([2, 2]) # Debug tetro 
+dbg_tetro = TetroL([2, 2]) # Debug tetro 
 
 while running:
     clock.tick(FPS)
@@ -118,7 +118,8 @@ while running:
             elif event.key == pygame.K_DOWN:
                 new_pos[1] = 1
             elif event.key == pygame.K_r:
-                dbg_tetro.rotate(grid)
+                if type(dbg_tetro) != TetroCircle:
+                    dbg_tetro.rotate(grid)
     
     # Process
     refresh_grid(grid)

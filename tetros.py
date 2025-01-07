@@ -12,6 +12,7 @@ class Tetro:
         pass # Abstract method
 
     def rotate(self, grid):
+        # -- 1. Set the new rotation
         new_rot = None
         match self.rotation:
             case Rotation.LEFT:
@@ -27,6 +28,7 @@ class Tetro:
         is_blocked = False
         wallkick_dir = 0
         
+        # 2. -- Check if the rotated blocks will hit a wall or a placed block
         for block in rotated_blocks:
             bx = self.position[0] + block[0]
             by = self.position[1] + block[1]
@@ -38,23 +40,22 @@ class Tetro:
                 is_blocked = True
 
             # -- Check if block in new pos will hit already placed blocks
-            try:
+            within_vergrid = by > 0 and by < GRID_HEIGHT- 1
+            within_horgrid = bx > 0 and bx < GRID_WIDTH - 1
+            if (within_vergrid) and (within_horgrid):
                 if grid[by][bx] == PLACED:
                     is_blocked = True
-            except:
-                # This is a bit hacky but screw it
+            else:
                 is_blocked = True
                 break
             
-        # -- TODO: Wall kick to right
+        # -- 3. Try Wall kick to right
         if is_blocked:
-            # -- DEBUG 1 --
-            newgrid = copy.deepcopy(grid)
+            # # -- DEBUG 1 --
+            # newgrid = copy.deepcopy(grid)
 
             for kick in range(1, 3):
                 for block in rotated_blocks:
-                    # TODO: Try wall kick to right                
-                    # TODO: Add condition to check wall collisions
                     wallk_right = self.position[0] + block[0] + kick
                     by = self.position[1] + block[1]
 
@@ -81,9 +82,9 @@ class Tetro:
                 if not is_blocked:
                     break
 
-        # TODO: If still blocked, wall kick to left
+        # -- 4. If still blocked, wall kick to left
         if is_blocked:
-            print("Still blocked, kicking to left...")
+            # print("Still blocked, kicking to left...")
             
             for kick in range(1, 3):
                 for block in rotated_blocks:
@@ -95,7 +96,7 @@ class Tetro:
                         is_blocked = True
                         break
                                 
-                    if wallk_left > 0:
+                    if wallk_left > 0 and wallk_left <= GRID_WIDTH-1:
                         if grid[by][wallk_left] == PLACED:
                             wallkick_dir = 0
                             is_blocked = True
@@ -110,9 +111,9 @@ class Tetro:
                 if not is_blocked:
                     break
 
-        # -- Allow rotate if all is good
+        # -- 5. Set current rotation to new rotation if all is good
         if not is_blocked:
-            print("Not blocked...rotating")
+            # print("Not blocked...rotating")
             self.rotation = new_rot
 
             if wallkick_dir != 0 :
@@ -154,6 +155,42 @@ class TetroJ(Tetro):
                 [-1, 1],
                 [0, -1]
             ]
+        
+class TetroL(Tetro):
+    def __init__(self, pos, rotation=Rotation.LEFT):
+        Tetro.__init__(self, pos, rotation)
+        self.position = pos
+        self.rotation = rotation
+
+    def get_blocks(self, rotation: Rotation):
+        if rotation == Rotation.LEFT:
+            return [
+                [0, 0], 
+                [1, 0],
+                [2, 0],
+                [0, 1]
+            ]
+        elif rotation == Rotation.TOP:
+            return [
+                [0, -1],
+                [1, -1],
+                [1, 0],
+                [1, 1]
+            ]
+        elif rotation == Rotation.RIGHT:
+            return [
+                [0, 1],
+                [1, 1],
+                [2, 1],
+                [2, 0]
+            ]
+        elif rotation == Rotation.BOTTOM:
+            return [
+                [1, -1],
+                [1, 0],
+                [1, 1],
+                [2, 1]
+            ]
 
 class TetroT(Tetro):
     def __init__(self, pos, rotation=Rotation.BOTTOM):
@@ -189,4 +226,88 @@ class TetroT(Tetro):
                 [0, 1],
                 [1, 0],
                 [-1, 0]
+            ]
+        
+class TetroS(Tetro):
+    def __init__(self, pos, rotation=Rotation.LEFT):
+        Tetro.__init__(self, pos, rotation)
+        self.position = pos
+        self.rotation = rotation
+
+    def get_blocks(self, rotation: Rotation):
+        if rotation == Rotation.LEFT or rotation == Rotation.RIGHT:
+            return [
+                [0, 0], 
+                [1, 0],
+                [0, 1],
+                [-1, 1]
+            ]
+        elif rotation == Rotation.TOP or rotation == Rotation.BOTTOM:
+            return [
+                [0, 0],
+                [-1, 0],
+                [-1, -1],
+                [0, 1]
+            ]
+        
+class TetroZ(Tetro):
+    def __init__(self, pos, rotation=Rotation.LEFT):
+        Tetro.__init__(self, pos, rotation)
+        self.position = pos
+        self.rotation = rotation
+
+    def get_blocks(self, rotation: Rotation):
+        if rotation == Rotation.LEFT or rotation == Rotation.RIGHT:
+            return [
+                [0, 0],
+                [-1, 0],
+                [0, 1],
+                [1, 1],
+            ]
+        elif rotation == Rotation.TOP or rotation == Rotation.BOTTOM:
+            return [
+                [0, 0],
+                [1, 0],
+                [1, -1],
+                [0, 1],
+            ]
+
+class TetroI(Tetro):
+    def __init__(self, pos, rotation=Rotation.LEFT):
+        Tetro.__init__(self, pos, rotation)
+        self.position = pos
+        self.rotation = rotation
+
+    def get_blocks(self, rotation: Rotation):
+        if rotation == Rotation.LEFT or rotation == Rotation.RIGHT:
+            return [
+                [0, 0], 
+                [1, 0],
+                [-1, 0],
+                [-2, 0]
+            ]
+        elif rotation == Rotation.TOP or rotation == Rotation.BOTTOM:
+            return [
+                [-1, -1],
+                [-1, 0],
+                [-1, 1],
+                [-1, 2]
+            ]
+
+class TetroCircle(Tetro):
+    def __init__(self, pos, rotation=Rotation.LEFT):
+        Tetro.__init__(self, pos, rotation)
+        self.position = pos
+        self.rotation = rotation
+
+    def get_blocks(self, rotation: Rotation):
+        if (
+            rotation == Rotation.LEFT or rotation == Rotation.RIGHT or 
+            rotation == Rotation.TOP or rotation == rotation.BOTTOM
+        ):
+            return [
+                [0, 0], 
+                [1, 0],
+                [1, 1],
+                [0, 1]
             ]
