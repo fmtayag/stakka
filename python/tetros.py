@@ -123,8 +123,6 @@ class Tetro:
 class TetroJ(Tetro):
     def __init__(self, pos, rotation=Rotation.LEFT):
         Tetro.__init__(self, pos, rotation)
-        self.position = pos
-        self.rotation = rotation
 
     def get_blocks(self, rotation: Rotation):
         if rotation == Rotation.LEFT:
@@ -159,8 +157,6 @@ class TetroJ(Tetro):
 class TetroL(Tetro):
     def __init__(self, pos, rotation=Rotation.LEFT):
         Tetro.__init__(self, pos, rotation)
-        self.position = pos
-        self.rotation = rotation
 
     def get_blocks(self, rotation: Rotation):
         if rotation == Rotation.LEFT:
@@ -195,8 +191,6 @@ class TetroL(Tetro):
 class TetroT(Tetro):
     def __init__(self, pos, rotation=Rotation.BOTTOM):
         Tetro.__init__(self, pos, rotation)
-        self.position = pos
-        self.rotation = rotation
 
     def get_blocks(self, rotation: Rotation):
         if rotation == Rotation.LEFT:
@@ -231,8 +225,6 @@ class TetroT(Tetro):
 class TetroS(Tetro):
     def __init__(self, pos, rotation=Rotation.LEFT):
         Tetro.__init__(self, pos, rotation)
-        self.position = pos
-        self.rotation = rotation
 
     def get_blocks(self, rotation: Rotation):
         if rotation == Rotation.LEFT or rotation == Rotation.RIGHT:
@@ -253,8 +245,6 @@ class TetroS(Tetro):
 class TetroZ(Tetro):
     def __init__(self, pos, rotation=Rotation.LEFT):
         Tetro.__init__(self, pos, rotation)
-        self.position = pos
-        self.rotation = rotation
 
     def get_blocks(self, rotation: Rotation):
         if rotation == Rotation.LEFT or rotation == Rotation.RIGHT:
@@ -275,8 +265,6 @@ class TetroZ(Tetro):
 class TetroI(Tetro):
     def __init__(self, pos, rotation=Rotation.LEFT):
         Tetro.__init__(self, pos, rotation)
-        self.position = pos
-        self.rotation = rotation
 
     def get_blocks(self, rotation: Rotation):
         if rotation == Rotation.LEFT or rotation == Rotation.RIGHT:
@@ -297,8 +285,6 @@ class TetroI(Tetro):
 class TetroCircle(Tetro):
     def __init__(self, pos, rotation=Rotation.LEFT):
         Tetro.__init__(self, pos, rotation)
-        self.position = pos
-        self.rotation = rotation
 
     def get_blocks(self, rotation: Rotation):
         if (
