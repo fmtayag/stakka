@@ -9,12 +9,6 @@ from tetros import Tetro, TetroJ, TetroT
 
 pygame.init()
 
-def display_grid(grid):
-    for row in grid:
-        for i in range(len(row)):
-            print(row[i], end="")
-        print()
-
 def refresh_grid(grid):
     for row in grid:
         for i in range(len(row)):
@@ -103,6 +97,7 @@ grid[3][1] = PLACED
 grid[5][2] = PLACED
 grid[5][3] = PLACED
 
+# dbg_tetro = TetroT([1, 4]) # Debug tetro 
 dbg_tetro = TetroT([2, 2]) # Debug tetro 
 
 while running:

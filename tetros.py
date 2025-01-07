@@ -1,10 +1,15 @@
 
-from constants import GRID_HEIGHT, GRID_WIDTH, PLACED, Rotation
+import copy
+from constants import BLOCK, GRID_HEIGHT, GRID_WIDTH, PLACED, Rotation
+from grid_display import display_grid
 
 class Tetro:
     def __init__(self, pos, rotation):
         self.position = pos 
         self.rotation = rotation
+
+    def get_blocks(self):
+        pass # Abstract method
 
     def rotate(self, grid):
         new_rot = None
@@ -18,10 +23,11 @@ class Tetro:
             case Rotation.BOTTOM:
                 new_rot = Rotation.LEFT
 
-        # TODO: allow wall kicks
-        blocks = self.get_blocks(new_rot)
+        rotated_blocks = self.get_blocks(new_rot)
         is_blocked = False
-        for block in blocks:
+        wallkick_dir = 0
+        
+        for block in rotated_blocks:
             bx = self.position[0] + block[0]
             by = self.position[1] + block[1]
             # -- Check if block in new pos will hit wall
@@ -30,21 +36,88 @@ class Tetro:
                 by < 0 or by > GRID_HEIGHT-1
             ):
                 is_blocked = True
-                break
 
             # -- Check if block in new pos will hit already placed blocks
             try:
                 if grid[by][bx] == PLACED:
                     is_blocked = True
-                    break
             except:
                 # This is a bit hacky but screw it
                 is_blocked = True
                 break
+            
+        # -- TODO: Wall kick to right
+        if is_blocked:
+            # -- DEBUG 1 --
+            newgrid = copy.deepcopy(grid)
+
+            for kick in range(1, 3):
+                for block in rotated_blocks:
+                    # TODO: Try wall kick to right                
+                    # TODO: Add condition to check wall collisions
+                    wallk_right = self.position[0] + block[0] + kick
+                    by = self.position[1] + block[1]
+
+                    # -- DEBUG 1 --
+                    # newgrid[by][wallk_right] = 3
+                    # display_grid(newgrid)
+
+                    # Check if block in rotated pos will collide with the ceiling
+                    if by < 0:
+                        is_blocked = True
+                        break
+                    
+                    if wallk_right > 0 and wallk_right <= GRID_WIDTH-1:
+                        if grid[by][wallk_right] == PLACED and by > 0:
+                            wallkick_dir = 0
+                            is_blocked = True
+                            break
+                        else:
+                            wallkick_dir = kick
+                            is_blocked = False
+                    else:
+                        is_blocked = True
+                        break
+                if not is_blocked:
+                    break
+
+        # TODO: If still blocked, wall kick to left
+        if is_blocked:
+            print("Still blocked, kicking to left...")
+            
+            for kick in range(1, 3):
+                for block in rotated_blocks:
+                    wallk_left = self.position[0] + block[0] - kick
+                    by = self.position[1] + block[1]
+
+                    # Check if block in rotated pos will collide with the ceiling
+                    if by < 0:
+                        is_blocked = True
+                        break
+                                
+                    if wallk_left > 0:
+                        if grid[by][wallk_left] == PLACED:
+                            wallkick_dir = 0
+                            is_blocked = True
+                            break
+                        else:
+                            wallkick_dir = -kick
+                            is_blocked = False
+                    else:
+                        wallkick_dir = 0
+                        is_blocked = True 
+                        break
+                if not is_blocked:
+                    break
 
         # -- Allow rotate if all is good
         if not is_blocked:
+            print("Not blocked...rotating")
             self.rotation = new_rot
+
+            if wallkick_dir != 0 :
+                self.position[0] += wallkick_dir
+                print(self.position)
 
 class TetroJ(Tetro):
     def __init__(self, pos, rotation=Rotation.LEFT):
