@@ -5,7 +5,7 @@ public class GameLogic : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is create
     GameGrid gameGrid;
-    TetroT tetro = new TetroT();
+    Tetromino tetro = new TetroT();
     int axisHori = 0;
     int axisVerti = 0;
 
@@ -42,6 +42,10 @@ public class GameLogic : MonoBehaviour
             Debug.Log("Pressed Down");
             axisVerti = -1;
         }
+        else if (Input.GetKeyDown(KeyCode.UpArrow)) {
+            Debug.Log("Pressed 'Rotate' key");
+            tetro.Rotate(gameGrid.Grid);
+        }
     }
 
     void PlaceTetro()
@@ -53,7 +57,7 @@ public class GameLogic : MonoBehaviour
         }
         else
         {
-            int[,] blocks = tetro.GetBlocks();
+            int[,] blocks = tetro.GetBlocks(tetro.rotation);
 
             for (int row = 0; row < 4; row++)
             {
