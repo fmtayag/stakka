@@ -16,18 +16,30 @@ public abstract class Tetromino
         /* 
         Purpose: Check if tetro is not blocked, if not then return the new grid
         */
-        int newXPos = (int)position.x + axisHori;
-        int newYPos = (int)position.y + axisVerti;
+        int currentXPos = (int)position.x;
+        int currentYPos = (int)position.y;
+        int newXPos = currentXPos + axisHori;
+        int newYPos = currentYPos + axisVerti;
         bool isBlocked = false;
         TileState[,] newGrid = (TileState[,])currentGrid.Clone();
         int[,] blocks = GetBlocks();
 
+        // 1. Remove the blocks in current position
+        for(int row=0; row<4; row++) {
+            int bx = blocks[row, 0];
+            int by = blocks[row, 1];
+
+            // TODO: Add check if newGrid tile is already PLACED??
+            newGrid[currentYPos+by, currentXPos+bx] = TileState.FREE;
+        }
+
+        // 2. Perform checks for isBlocked
         for (int row = 0; row < 4; row++)
         {
             int bx = blocks[row, 0];
             int by = blocks[row, 1];
 
-            // -- Check 1: Check if block in block in new pos is within the grid
+            // -- Check 1: Check if block in new pos is within the grid
             if (
                 newXPos + bx < 0 || newXPos + bx > GameGrid.GRID_WIDTH - 1 ||
                 newYPos + by < 0 || newYPos + by > GameGrid.GRID_HEIGHT - 1
@@ -36,14 +48,26 @@ public abstract class Tetromino
                 isBlocked = true;
                 break;
             }
+            // TODO: Check 2: Check if block in new pos will hit already placed blocks
+            else {
+                if (newGrid[newYPos + by, newXPos + bx] == TileState.PLACED) {
+                    isBlocked = true;
+                    break;
+                }
+            }
 
             newGrid[newYPos + by, newXPos + bx] = TileState.BLOCK;
         }
 
+        // 3. Return the grid
         if (isBlocked) return currentGrid;
         else
+        {   
+            // Set the new position
             position = new Vector2(newXPos, newYPos); 
             return (TileState[,])newGrid.Clone();
+        }
+            
     }
 
     abstract public int[,] GetBlocks();

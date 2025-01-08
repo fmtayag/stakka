@@ -22,7 +22,7 @@ public class GameGrid : MonoBehaviour
         DisplayGrid = new GameObject[GRID_HEIGHT, GRID_WIDTH];
         prefab = GameObject.Find("Image");
         canvas = GameObject.Find("Canvas").transform;
-
+        Grid[1, 4] = TileState.PLACED; // TODO: Test
         CreateDisplayGrid();
     }
 
