@@ -18,7 +18,13 @@ public class GameLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // -- Get input
+       GetInput();
+       RefreshGrid();
+       PlaceTetro();
+       DrawGrid();
+    }
+    
+    void GetInput() {
         axisHori = 0;
         axisVerti = 0;
         if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -36,8 +42,9 @@ public class GameLogic : MonoBehaviour
             Debug.Log("Pressed Down");
             axisVerti = -1;
         }
+    }
 
-        // -- Refresh grid
+    void RefreshGrid() {
         for (int y = 0; y < GameGrid.GRID_HEIGHT; y++)
         {
             for (int x = 0; x < GameGrid.GRID_WIDTH; x++)
@@ -49,8 +56,9 @@ public class GameLogic : MonoBehaviour
                 }
             }
         }
+    }
 
-        // -- Move tetromino if there is input, otherwise just place it in its current position
+    void PlaceTetro() {
         if (axisHori != 0 || axisVerti != 0)
         {
             gameGrid.Grid = tetro.Move(gameGrid.Grid, axisHori, axisVerti);
@@ -67,9 +75,9 @@ public class GameLogic : MonoBehaviour
                 gameGrid.Grid[(int)(tetro.position.y + by), (int)(tetro.position.x + bx)] = TileState.BLOCK;
             }
         }
+    }
 
-
-        // -- 'Draw' the grid
+    void DrawGrid() {
         for (int y = 0; y < GameGrid.GRID_HEIGHT; y++)
         {
             for (int x = 0; x < GameGrid.GRID_WIDTH; x++)
