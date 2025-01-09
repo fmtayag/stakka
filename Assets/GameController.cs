@@ -11,6 +11,10 @@ public class GameLogic : MonoBehaviour
     int dbgIndex;
     int axisHori = 0;
     int axisVerti = 0;
+    float goDownTimer;
+    float goDownDelay = 1f;
+    bool canLock = false;
+
 
     void Start()
     {
@@ -28,6 +32,8 @@ public class GameLogic : MonoBehaviour
             new TetroZulu()
         };
         tetro = dbgTetros[dbgIndex];
+
+        goDownTimer = Time.time;
     }
 
     // Update is called once per frame
@@ -56,6 +62,7 @@ public class GameLogic : MonoBehaviour
         {
             Debug.Log("Pressed Down");
             axisVerti = 1;
+            goDownTimer = Time.time; // Reset timer
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow)) {
             Debug.Log("Pressed 'Rotate' key");
@@ -89,10 +96,19 @@ public class GameLogic : MonoBehaviour
     }
 
     void PlaceTetro()
-    {
+    {   
+        // Automatically go down after 1000ms
+        float now = Time.time;
+
+        if (now - goDownTimer >= goDownDelay) {
+            axisVerti = 1;
+            goDownTimer = now;
+            canLock = true;
+        }
+
         if (axisHori != 0 || axisVerti != 0)
         {
-            gameGrid.Grid = tetro.Move(gameGrid.Grid, axisHori, axisVerti);
+            gameGrid.Grid = tetro.Move(gameGrid.Grid, axisHori, axisVerti, canLock);
         }
         else
         {

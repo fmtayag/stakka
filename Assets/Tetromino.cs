@@ -159,10 +159,11 @@ public abstract class Tetromino
             if(wallkickDirection != 0) position.x += wallkickDirection; 
         }
     }
-    public TileState[,] Move(TileState[,] currentGrid, int axisHori, int axisVerti)
+    public TileState[,] Move(TileState[,] currentGrid, int axisHori, int axisVerti, bool canLock)
     {
         /* 
-        Purpose: Check if tetro is not blocked, if not then return the new grid
+        Purpose: Check if tetro is not blocked, if not then return the new grid with the tetro in the new position
+        ... or with the tetro locked in place
         */
         int currentXPos = (int)position.x;
         int currentYPos = (int)position.y;
@@ -172,20 +173,21 @@ public abstract class Tetromino
         bool isLocked = false;
         TileState[,] newGrid = (TileState[,])currentGrid.Clone();
         int[,] blocks = GetBlocks(rotation);
-
-        Debug.Log(rotation);
+        const int BLOCKS_COUNT = 4;
 
         // 1. Remove the blocks in current position
-        for(int row=0; row<4; row++) {
+        for(int row=0; row<BLOCKS_COUNT; row++) {
             int bx = blocks[row, 0];
             int by = blocks[row, 1];
 
             // TODO: Add check if newGrid tile is already PLACED??
+            // Note: ^^^ Seems unnecessary. Will keep this note just to remind me
+            // ... if things go south
             newGrid[currentYPos+by, currentXPos+bx] = TileState.FREE;
         }
 
-        // 2. Perform checks for isBlocked
-        for (int row = 0; row < 4; row++)
+        // 2. Perform checks
+        for (int row = 0; row < BLOCKS_COUNT; row++)
         {
             int bx = blocks[row, 0];
             int by = blocks[row, 1];
@@ -197,48 +199,40 @@ public abstract class Tetromino
             )
             {
                 isBlocked = true;
-                break;
             }
             // Check 2: Check if block in new pos will hit already placed blocks
             else {
                 if (newGrid[newYPos + by, newXPos + bx] == TileState.PLACED) {
                     isBlocked = true;
-                    break;
                 }
             }
 
-            newGrid[newYPos + by, newXPos + bx] = TileState.BLOCK;
-        }
-
-        // 3. Perform vertical 'no more room to move' check
-        // TODO: Can still make this code clearer
-        // TODO: Add a way to 'wait' some time before locking the blocks in
-        // TODO: Fix being able to lock in when moving sidewards
-        if (axisHori == 0) {
-            for (int row = 0; row < 4; row++)
-            {
-                int bx = blocks[row, 0];
-                int by = blocks[row, 1];
-
-                if (newYPos + by == GameGrid.GRID_HEIGHT - 1 || newGrid[newYPos + by, newXPos + bx] == TileState.PLACED){
+            // Check 3: Is able to lock, provided there is no horizontal movement
+            if (axisHori == 0) {
+                if (newYPos + by > GameGrid.GRID_HEIGHT - 1 || newGrid[newYPos + by, newXPos + bx] == TileState.PLACED){
                     isLocked = true;
-                    break;
                 }
             }
+
+            // Check 4: If not blocked, then place the current block in the new location
+            if(!isBlocked) {
+                newGrid[newYPos + by, newXPos + bx] = TileState.BLOCK;
+            }
+            else {
+                // Note: I'm a bit iffy about this. Cloning seems like a waste of resources
+                newGrid = (TileState[,])currentGrid.Clone();
+                break;
+            }
+    
         }
 
-        // 3.5. If locked, convert the blocks to TileState.PLACED
-        if(isLocked) {
-            Debug.Log("LOCKED");
-            for (int row = 0; row < 4; row++)
+        // 3. If locked, convert the blocks to TileState.PLACED
+        if(isLocked && canLock) {
+            for (int row = 0; row < BLOCKS_COUNT; row++)
             {
                 int bx = blocks[row, 0];
                 int by = blocks[row, 1];
 
-                if (newGrid[newYPos + by, newXPos + bx] == TileState.BLOCK) {
-                    newGrid[newYPos + by, newXPos + bx] = TileState.FREE; // Hacky fix to remove the 'residue' blocks
-                }
-                
                 if(isBlocked) {
                     newGrid[currentYPos + by, currentXPos + bx] = TileState.PLACED;
                 }
@@ -254,13 +248,31 @@ public abstract class Tetromino
         }
 
         // 4. Return the grid
-        if (isBlocked) return currentGrid;
+        if (isBlocked) 
+            return currentGrid;
         else
         {   
             // Set the new position
             position = new Vector2(newXPos, newYPos); 
             return (TileState[,])newGrid.Clone();
         }
+
+        // 3. Perform vertical 'no more room to move' check
+        // TODO: Can still make this code clearer
+        // DONE: Add a way to 'wait' some time before locking the blocks in
+        // DONE: Fix being able to lock in when moving sidewards
+        // if (axisHori == 0) {
+        //     for (int row = 0; row < BLOCKS_COUNT; row++)
+        //     {
+        //         int bx = blocks[row, 0];
+        //         int by = blocks[row, 1];
+
+        //         if (newYPos + by == GameGrid.GRID_HEIGHT - 1 || newGrid[newYPos + by, newXPos + bx] == TileState.PLACED){
+        //             isLocked = true;
+        //             break;
+        //         }
+        //     }
+        // }
             
     }
 
