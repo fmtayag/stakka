@@ -9,7 +9,7 @@ public enum Rotation
 public abstract class Tetromino
 {
     public Rotation rotation = Rotation.LEFT;
-    public Vector2 position = new Vector2(1, 5); // TODO: Test
+    public Vector2 position = new Vector2(5, 5); // TODO: Test
     public void Rotate(TileState[,] currentGrid) {
         /*
         Purpose: Rotate the tetro after ensuring it will not hit a will or a placed block
@@ -221,7 +221,7 @@ public abstract class Tetromino
     abstract public int[,] GetBlocks(Rotation on_rotation);
 }
 
-public class TetroT : Tetromino
+public class TetroTango : Tetromino
 {
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -257,6 +257,179 @@ public class TetroT : Tetromino
                 };
             default:
                 return new int[0, 0];
+        }
+    }
+}
+
+public class TetroOscar : Tetromino
+{
+    public override int[,] GetBlocks(Rotation on_rotation)
+    {
+        return new int[,] {
+            {0, 0},
+            {1, 0},
+            {1, 1},
+            {0, 1}
+        };
+    }
+}
+
+public class TetroIndia : Tetromino
+{
+    public override int[,] GetBlocks(Rotation on_rotation)
+    {
+        switch(on_rotation) {
+            case Rotation.LEFT:
+            case Rotation.RIGHT:
+                return new int[,] {
+                    {0, 0}, 
+                    {1, 0},
+                    {-1, 0},
+                    {-2, 0}
+                };
+            case Rotation.TOP:
+            case Rotation.BOTTOM:
+                return new int[,] {
+                    {0, 0}, 
+                    {1, 0},
+                    {-1, 0},
+                    {-2, 0}
+                };
+            default:
+                return new int[0,0];
+        }
+        
+    }
+}
+
+public class TetroJuliett : Tetromino
+{
+    public override int[,] GetBlocks(Rotation on_rotation)
+    {
+        switch(on_rotation) {
+            case Rotation.LEFT:
+                return new int[,] {
+                    {0, 0}, 
+                    {-1, 0},
+                    {-2, 0},
+                    {0, 1}
+                };
+            case Rotation.RIGHT:
+                return new int[,] {
+                    {-2, 1},
+                    {-1, 1},
+                    {0, 1},
+                    {-2, 0}
+                };
+            case Rotation.TOP:
+                return new int[,] {
+                    {-1, 1},
+                    {-1, 0},
+                    {-1, -1},
+                    {-2, 1}
+                };
+            case Rotation.BOTTOM:
+                return new int[,] {
+                    {-1, -1}, 
+                    {-1, 0},
+                    {-1, 1},
+                    {0, -1}
+                };
+            default:
+                return new int[0,0];
+        }
+    }
+}
+
+public class TetroLima : Tetromino
+{
+    public override int[,] GetBlocks(Rotation on_rotation)
+    {
+        switch(on_rotation) {
+            case Rotation.LEFT:
+                 return new int[,] {
+                    {0, 0}, 
+                    {1, 0},
+                    {2, 0},
+                    {0, 1}
+                };
+            case Rotation.RIGHT:
+                return new int[,] {
+                    {0, 1},
+                    {1, 1},
+                    {2, 1},
+                    {2, 0}
+                };
+            case Rotation.TOP:
+                return new int[,] {
+                    {0, -1},
+                    {1, -1},
+                    {1, 0},
+                    {1, 1}
+                };
+            case Rotation.BOTTOM:
+                return new int[,] {
+                    {1, -1},
+                    {1, 0},
+                    {1, 1},
+                    {2, 1}
+                };
+            default:
+                return new int[0,0];
+        }
+    }
+}
+
+public class TetroSierra : Tetromino
+{
+    public override int[,] GetBlocks(Rotation on_rotation)
+    {
+        switch(on_rotation) {
+            case Rotation.LEFT:
+            case Rotation.RIGHT:
+                return new int[,] {
+                    {0, 0}, 
+                    {1, 0},
+                    {0, 1},
+                    {-1, 1}
+                };
+            case Rotation.TOP:
+            case Rotation.BOTTOM:
+                return new int[,] {
+                    {0, 0},
+                    {-1, 0},
+                    {-1, -1},
+                    {0, 1}
+                };
+            default:
+                return new int[0,0];
+        }
+    }
+}
+
+public class TetroZulu : Tetromino
+{
+    public override int[,] GetBlocks(Rotation on_rotation)
+    {
+        switch(on_rotation) {
+            case Rotation.LEFT:
+            case Rotation.RIGHT:
+                return new int[,] {
+                    {0, 0}, 
+                    {-1, 0},
+                    {0, 1},
+                    {1, 1}
+                };
+            case Rotation.TOP:
+            case Rotation.BOTTOM:
+                return new int[,] {
+                    {0, 0},
+                    {1, 0},
+                    {1, -1},
+                    {0, 1}
+                };
+            default:
+                return new int[0,0];
         }
     }
 }

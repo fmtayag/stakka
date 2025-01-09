@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,7 +6,9 @@ public class GameLogic : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is create
     GameGrid gameGrid;
-    Tetromino tetro = new TetroT();
+    Tetromino tetro;
+    Tetromino[] dbgTetros;
+    int dbgIndex;
     int axisHori = 0;
     int axisVerti = 0;
 
@@ -13,6 +16,18 @@ public class GameLogic : MonoBehaviour
     {
         GameObject obj = new GameObject("GameGridObject");
         gameGrid = obj.AddComponent<GameGrid>();
+
+        dbgIndex = 0;
+        dbgTetros = new Tetromino[] {
+            new TetroTango(), 
+            new TetroOscar(), 
+            new TetroIndia(), 
+            new TetroJuliett(), 
+            new TetroLima(),
+            new TetroSierra(),
+            new TetroZulu()
+        };
+        tetro = dbgTetros[dbgIndex];
     }
 
     // Update is called once per frame
@@ -40,12 +55,37 @@ public class GameLogic : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             Debug.Log("Pressed Down");
-            axisVerti = -1;
+            axisVerti = 1;
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow)) {
             Debug.Log("Pressed 'Rotate' key");
             tetro.Rotate(gameGrid.Grid);
         }
+        else if (Input.GetKeyDown(KeyCode.F1)) {
+            Debug.Log("Pressed 'Switch' key");
+            dbgIndex++;
+
+            if (dbgIndex > dbgTetros.Length - 1){
+                dbgIndex = 0;
+            }
+            
+            int oldXPos = (int) tetro.position.x;
+            int oldYPos = (int) tetro.position.y; 
+            
+            // Remove the blocks in current position
+            int[,] blocks = tetro.GetBlocks(tetro.rotation);
+            for(int row=0; row<4; row++) {
+                int bx = blocks[row, 0];
+                int by = blocks[row, 1];
+
+                gameGrid.Grid[oldYPos+by, oldXPos+bx] = TileState.FREE;
+            }
+
+            tetro = dbgTetros[dbgIndex];
+            tetro.position.x = oldXPos;
+            tetro.position.y = oldYPos;
+            
+        }   
     }
 
     void PlaceTetro()
