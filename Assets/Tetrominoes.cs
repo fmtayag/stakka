@@ -1,5 +1,7 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations;
+using UnityEngine.Tilemaps;
 
 public enum Rotation
 {
@@ -167,6 +169,7 @@ public abstract class Tetromino
         int newXPos = currentXPos + axisHori;
         int newYPos = currentYPos + axisVerti;
         bool isBlocked = false;
+        bool isLocked = false;
         TileState[,] newGrid = (TileState[,])currentGrid.Clone();
         int[,] blocks = GetBlocks(rotation);
 
@@ -207,7 +210,50 @@ public abstract class Tetromino
             newGrid[newYPos + by, newXPos + bx] = TileState.BLOCK;
         }
 
-        // 3. Return the grid
+        // 3. Perform vertical 'no more room to move' check
+        // TODO: Can still make this code clearer
+        // TODO: Add a way to 'wait' some time before locking the blocks in
+        // TODO: Fix being able to lock in when moving sidewards
+        if (axisHori == 0) {
+            for (int row = 0; row < 4; row++)
+            {
+                int bx = blocks[row, 0];
+                int by = blocks[row, 1];
+
+                if (newYPos + by == GameGrid.GRID_HEIGHT - 1 || newGrid[newYPos + by, newXPos + bx] == TileState.PLACED){
+                    isLocked = true;
+                    break;
+                }
+            }
+        }
+
+        // 3.5. If locked, convert the blocks to TileState.PLACED
+        if(isLocked) {
+            Debug.Log("LOCKED");
+            for (int row = 0; row < 4; row++)
+            {
+                int bx = blocks[row, 0];
+                int by = blocks[row, 1];
+
+                if (newGrid[newYPos + by, newXPos + bx] == TileState.BLOCK) {
+                    newGrid[newYPos + by, newXPos + bx] = TileState.FREE; // Hacky fix to remove the 'residue' blocks
+                }
+                
+                if(isBlocked) {
+                    newGrid[currentYPos + by, currentXPos + bx] = TileState.PLACED;
+                }
+                else {
+                    newGrid[newYPos + by, newXPos + bx] = TileState.PLACED;
+                }
+            }
+
+            // TODO: 'Reset the tetromino'
+            position = new Vector2(3, 3); 
+
+            return (TileState[,])newGrid.Clone();
+        }
+
+        // 4. Return the grid
         if (isBlocked) return currentGrid;
         else
         {   
@@ -290,10 +336,10 @@ public class TetroIndia : Tetromino
             case Rotation.TOP:
             case Rotation.BOTTOM:
                 return new int[,] {
-                    {0, 0}, 
-                    {1, 0},
+                    {-1, -1}, 
                     {-1, 0},
-                    {-2, 0}
+                    {-1, 1},
+                    {-1, 2}
                 };
             default:
                 return new int[0,0];

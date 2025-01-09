@@ -93,7 +93,6 @@ public class GameLogic : MonoBehaviour
         if (axisHori != 0 || axisVerti != 0)
         {
             gameGrid.Grid = tetro.Move(gameGrid.Grid, axisHori, axisVerti);
-
         }
         else
         {
