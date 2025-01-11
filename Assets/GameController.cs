@@ -1,8 +1,7 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameLogic : MonoBehaviour
+public class GameController : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is create
     GameGrid gameGrid;
@@ -41,6 +40,7 @@ public class GameLogic : MonoBehaviour
     {
         GetInput();
         PlaceTetro();
+        LineClear();
         DrawGrid();
     }
 
@@ -121,6 +121,48 @@ public class GameLogic : MonoBehaviour
                 gameGrid.Grid[(int)(tetro.position.y + by), (int)(tetro.position.x + bx)] = TileState.BLOCK;
             }
         }
+    }
+
+    void LineClear() {
+        // DONE: Check for cleared rows
+        // TODO: Shift down the rows above the cleared rows
+        // Optimization idea: Check only from the topmost row to the bottom row
+        // Optimization idea: Run only when there is input
+        
+        // Scan for cleared rows
+        bool isLineClear = true;
+        bool[] clearedRows = new bool[20];
+
+        if (axisVerti != 0) {
+            for(int row=0; row<GameGrid.GRID_HEIGHT; row++) {
+                for(int col=0; col<GameGrid.GRID_WIDTH; col++) {
+                    if (gameGrid.Grid[row, col] != TileState.PLACED) {
+                        isLineClear = false;
+                        break;
+                    }
+                    else {
+                        isLineClear = true;
+                    }
+                }
+
+                if (isLineClear) {  
+                    Debug.Log($"Cleared row: {row}");
+                    clearedRows[row] = true;
+                    // TODO: Test remove
+                    for(int col=0; col<GameGrid.GRID_WIDTH; col++) 
+                    {
+                        gameGrid.Grid[row, col] = TileState.FREE;
+                    }
+                }
+            }
+        }
+        
+
+        // TODO: Remove cleared rows
+
+
+        // TODO: Shift down rows to fill the gaps created by removed rows
+            
     }
 
     void DrawGrid()

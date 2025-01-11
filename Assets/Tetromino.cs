@@ -1,7 +1,4 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Animations;
-using UnityEngine.Tilemaps;
 
 public enum Rotation
 {
@@ -11,7 +8,7 @@ public enum Rotation
 public abstract class Tetromino
 {
     public Rotation rotation = Rotation.LEFT;
-    public Vector2 position = new Vector2(5, 5); // TODO: Test
+    public Vector3 position = new Vector3(5, 5); // TODO: Test
     public void Rotate(TileState[,] currentGrid) {
         /*
         Purpose: Rotate the tetro after ensuring it will not hit a will or a placed block
