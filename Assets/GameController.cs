@@ -98,7 +98,7 @@ public class GameController : MonoBehaviour
                 inputVertTimer = now;
                 inputVertDelay = fastInputDelay;
                 axisVerti = 1;
-                goDownTimer = Time.time; // Reset timer
+                // goDownTimer = Time.time; // Reset timer
                 canLock = true; // TODO: notice me if things go to shit
             }
             else {
@@ -120,9 +120,6 @@ public class GameController : MonoBehaviour
             inputVertDelay = initInputDelay;
             inputVertTimer = Time.time;
         }
-
-        Debug.Log($"{axisHori}, {axisVerti}");
-
 
         if (Input.GetKeyDown(KeyCode.UpArrow)) {
             Debug.Log("Pressed 'Rotate' key");
@@ -151,6 +148,8 @@ public class GameController : MonoBehaviour
             tetro = dbgTetros[dbgIndex];
             tetro.position.x = oldXPos;
             tetro.position.y = oldYPos;
+
+            inputTimer = now;
             
         }   
     }
