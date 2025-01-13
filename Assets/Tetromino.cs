@@ -7,9 +7,10 @@ public enum Rotation
 
 public abstract class Tetromino
 {
+    public Color myColor = Color.magenta;
     public Rotation rotation = Rotation.LEFT;
     public Vector3 position = new Vector3(5, 5); // TODO: Test
-    public void Rotate(TileState[,] currentGrid) {
+    public void Rotate(Tile[,] currentGrid) {
         /*
         Purpose: Rotate the tetro after ensuring it will not hit a will or a placed block
         */
@@ -52,8 +53,11 @@ public abstract class Tetromino
             bool within_vergrid = by > 0 && by < GameGrid.GRID_HEIGHT- 1;
             bool within_horgrid = bx > 0 && bx < GameGrid.GRID_WIDTH - 1;
             if (within_vergrid && within_horgrid) {
-                if (currentGrid[by, bx] == TileState.PLACED)
+                if (currentGrid[by, bx].State == TileState.PLACED)
+                {
+                    Debug.Log($"Hit placed block {by}, {bx}");
                     isBlocked = true;
+                }
             }
             else {
                 isBlocked = true;
@@ -63,9 +67,11 @@ public abstract class Tetromino
 
         // -- Wall kick mechanism (Steps 3 and 4) --
         // 3. If blocked, try wall kick to the right
+        const int ROTATED_BLOCKS_COUNT = 4;
+        const int MAX_KICKS_TRY = 3;
         if(isBlocked) {
-            for(int kick=0; kick<3; kick++) {
-                for (int col=0;col<4;col++) {
+            for(int kick=0; kick<MAX_KICKS_TRY; kick++) {
+                for (int col=0;col<ROTATED_BLOCKS_COUNT;col++) {
                     int bx = (int) position[0] + rotated_blocks[col, 0];
                     int by = (int) position[1] + rotated_blocks[col, 1];
                     int wallk_right = bx + kick;
@@ -79,7 +85,7 @@ public abstract class Tetromino
                     // -- Out of bounds check
                     if (wallk_right > 0 && wallk_right <= GameGrid.GRID_WIDTH-1) {
                         // -- Check if block in rotated pos will intersect with a placed block
-                        if (currentGrid[by, wallk_right] == TileState.PLACED && by > 0) {
+                        if (currentGrid[by, wallk_right].State == TileState.PLACED && by > 0) {
                             wallkickDirection = 0;
                             isBlocked = true;
                             break;
@@ -117,7 +123,7 @@ public abstract class Tetromino
                     if (wallk_left > 0 && wallk_left <= GameGrid.GRID_WIDTH-1) 
                     {
                         // -- Check if block in rotated pos will intersect with a placed block
-                        if (currentGrid[by, wallk_left] == TileState.PLACED) {
+                        if (currentGrid[by, wallk_left].State == TileState.PLACED) {
                             wallkickDirection = 0;
                             isBlocked = true;
                             break;
@@ -147,7 +153,7 @@ public abstract class Tetromino
                 int bx = (int) position.x + GetBlocks(rotation)[col, 0];
                 int by = (int) position.y + GetBlocks(rotation)[col, 1];
 
-                currentGrid[by, bx] = TileState.FREE;
+                currentGrid[by, bx] = new Tile(TileState.FREE, Color.white);
             }
             // -- Apply the new rotation
             rotation = newRotation;
@@ -156,7 +162,7 @@ public abstract class Tetromino
             if(wallkickDirection != 0) position.x += wallkickDirection; 
         }
     }
-    public TileState[,] Move(TileState[,] currentGrid, int axisHori, int axisVerti, bool canLock)
+    public Tile[,] Move(Tile[,] currentGrid, int axisHori, int axisVerti, bool canLock)
     {
         /* 
         Purpose: Check if tetro is not blocked, if not then return the new grid with the tetro in the new position
@@ -168,7 +174,7 @@ public abstract class Tetromino
         int newYPos = currentYPos + axisVerti;
         bool isBlocked = false;
         bool isLocked = false;
-        TileState[,] newGrid = (TileState[,])currentGrid.Clone();
+        Tile[,] newGrid = (Tile[,])currentGrid.Clone();
         int[,] blocks = GetBlocks(rotation);
         const int BLOCKS_COUNT = 4;
 
@@ -180,7 +186,7 @@ public abstract class Tetromino
             // TODO: Add check if newGrid tile is already PLACED??
             // Note: ^^^ Seems unnecessary. Will keep this note just to remind me
             // ... if things go south
-            newGrid[currentYPos+by, currentXPos+bx] = TileState.FREE;
+            newGrid[currentYPos+by, currentXPos+bx] = new Tile(TileState.FREE, Color.white);
         }
 
         // 2. Perform checks
@@ -199,25 +205,25 @@ public abstract class Tetromino
             }
             // Check 2: Check if block in new pos will hit already placed blocks
             else {
-                if (newGrid[newYPos + by, newXPos + bx] == TileState.PLACED) {
+                if (newGrid[newYPos + by, newXPos + bx].State == TileState.PLACED) {
                     isBlocked = true;
                 }
             }
 
             // Check 3: Is able to lock, provided there is no horizontal movement
             if (axisHori == 0) {
-                if (newYPos + by > GameGrid.GRID_HEIGHT - 1 || newGrid[newYPos + by, newXPos + bx] == TileState.PLACED){
+                if (newYPos + by > GameGrid.GRID_HEIGHT - 1 || newGrid[newYPos + by, newXPos + bx].State == TileState.PLACED){
                     isLocked = true;
                 }
             }
 
             // Check 4: If not blocked, then place the current block in the new location
             if(!isBlocked) {
-                newGrid[newYPos + by, newXPos + bx] = TileState.BLOCK;
+                newGrid[newYPos + by, newXPos + bx] = new Tile(TileState.BLOCK, myColor);
             }
             else {
                 // Note: I'm a bit iffy about this. Cloning seems like a waste of resources
-                newGrid = (TileState[,])currentGrid.Clone();
+                newGrid = (Tile[,])currentGrid.Clone();
                 break;
             }
     
@@ -231,17 +237,17 @@ public abstract class Tetromino
                 int by = blocks[row, 1];
 
                 if(isBlocked) {
-                    newGrid[currentYPos + by, currentXPos + bx] = TileState.PLACED;
+                    newGrid[currentYPos + by, currentXPos + bx] = new Tile(TileState.PLACED, myColor);
                 }
                 else {
-                    newGrid[newYPos + by, newXPos + bx] = TileState.PLACED;
+                    newGrid[newYPos + by, newXPos + bx] = new Tile(TileState.PLACED, myColor);
                 }
             }
 
             // TODO: 'Reset the tetromino'
             position = new Vector2(3, 3); 
 
-            return (TileState[,])newGrid.Clone();
+            return (Tile[,])newGrid.Clone();
         }
 
         // 4. Return the grid
@@ -251,25 +257,8 @@ public abstract class Tetromino
         {   
             // Set the new position
             position = new Vector2(newXPos, newYPos); 
-            return (TileState[,])newGrid.Clone();
+            return (Tile[,])newGrid.Clone();
         }
-
-        // 3. Perform vertical 'no more room to move' check
-        // TODO: Can still make this code clearer
-        // DONE: Add a way to 'wait' some time before locking the blocks in
-        // DONE: Fix being able to lock in when moving sidewards
-        // if (axisHori == 0) {
-        //     for (int row = 0; row < BLOCKS_COUNT; row++)
-        //     {
-        //         int bx = blocks[row, 0];
-        //         int by = blocks[row, 1];
-
-        //         if (newYPos + by == GameGrid.GRID_HEIGHT - 1 || newGrid[newYPos + by, newXPos + bx] == TileState.PLACED){
-        //             isLocked = true;
-        //             break;
-        //         }
-        //     }
-        // }
             
     }
 
@@ -278,6 +267,9 @@ public abstract class Tetromino
 
 public class TetroTango : Tetromino
 {
+    public TetroTango() {
+        myColor = Color.magenta;
+    }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
         switch (on_rotation)
@@ -318,6 +310,9 @@ public class TetroTango : Tetromino
 
 public class TetroOscar : Tetromino
 {
+    public TetroOscar() {
+        myColor = Color.yellow;
+    }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
         return new int[,] {
@@ -331,6 +326,9 @@ public class TetroOscar : Tetromino
 
 public class TetroIndia : Tetromino
 {
+    public TetroIndia() {
+        myColor = Color.cyan;
+    }    
     public override int[,] GetBlocks(Rotation on_rotation)
     {
         switch(on_rotation) {
@@ -359,6 +357,9 @@ public class TetroIndia : Tetromino
 
 public class TetroJuliett : Tetromino
 {
+    public TetroJuliett() {
+        myColor = Color.blue;
+    }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
         switch(on_rotation) {
@@ -398,6 +399,9 @@ public class TetroJuliett : Tetromino
 
 public class TetroLima : Tetromino
 {
+    public TetroLima() {
+        myColor = new Color(198f / 255f, 156f / 255f , 4f / 255f, 1f);
+    }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
         switch(on_rotation) {
@@ -437,6 +441,9 @@ public class TetroLima : Tetromino
 
 public class TetroSierra : Tetromino
 {
+    public TetroSierra() {
+        myColor = Color.green;
+    }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
         switch(on_rotation) {
@@ -464,6 +471,9 @@ public class TetroSierra : Tetromino
 
 public class TetroZulu : Tetromino
 {
+    public TetroZulu() {
+        myColor = Color.red;
+    }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
         switch(on_rotation) {

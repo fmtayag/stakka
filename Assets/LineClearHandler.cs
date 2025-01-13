@@ -6,17 +6,16 @@ using UnityEngine.WSA;
 
 class LineClearHandler
 {
-    public static TileState[,] Handle(TileState[,] grid)
+    public static Tile[,] Handle(Tile[,] grid)
     {
         // DONE: Check for cleared rows
-        // TODO: Shift down the rows above the cleared rows
+        // DONE: Shift down the rows above the cleared rows
         // Optimization idea: Check only from the topmost row to the bottom row
         // Optimization idea: Run only when there is input
 
         // Scan for cleared rows
-        const int MAX_PASSES = 3;
+        const int MAX_PASSES = 3; // to check for cascading line clears
         int pass = 0;
-        // bool[] clearedRows = new bool[20]; // TODO: Replace with list
 
         while(pass < MAX_PASSES) {
             bool isLineClear = true;
@@ -24,7 +23,7 @@ class LineClearHandler
             {
                 for (int col = 0; col < GameGrid.GRID_WIDTH; col++)
                 {
-                    if (grid[row, col] != TileState.PLACED)
+                    if (grid[row, col].State != TileState.PLACED)
                     {
                         isLineClear = false;
                         break;
@@ -38,11 +37,11 @@ class LineClearHandler
                 if (isLineClear)
                 {
                     Debug.Log($"Cleared row: {row}");
-                    // clearedRows[row] = true;
-                    // // TODO: Test remove
+                    // Remove cleared rows
                     for (int col = 0; col < GameGrid.GRID_WIDTH; col++)
                     {
-                        grid[row, col] = TileState.FREE;
+                        grid[row, col].State = TileState.FREE;
+                        grid[row, col].Color = Color.black;
                     }
 
                      // 1. Mark segments
@@ -54,8 +53,6 @@ class LineClearHandler
                     foreach(List<(int, int)> segment in allSegments) {
                         grid = MoveSegmentDown(grid, segment);
                     }   
-
-                    // break;
                 }
             }
             pass++;
@@ -64,26 +61,27 @@ class LineClearHandler
         return grid;
     }
 
-    static TileState[,] MoveSegmentDown(TileState[,] currentGrid, List<(int, int)> segment)
+    static Tile[,] MoveSegmentDown(Tile[,] currentGrid, List<(int, int)> segment)
     {
         // TODO: Test and debug later
-        TileState[,] tempGrid = (TileState[,])currentGrid.Clone();
-        List<(int, int)> validCoords = new();
+        Tile[,] tempGrid = (Tile[,])currentGrid.Clone();
+        List<(int, int, Color)> validCoords = new();
 
         // 1. Remove the blocks in current pos in temp grid
         foreach((int, int) block in segment) {
             int row = block.Item1;
             int col = block.Item2;
-            Debug.Log($"FREEING {row}, {col}");
-            tempGrid[row, col] = TileState.FREE;
+            // Debug.Log($"FREEING {row}, {col}");
+            tempGrid[row, col].State = TileState.FREE;
+            tempGrid[row, col].Color = Color.white;
 
-            validCoords.Add((row, col));
+            validCoords.Add((row, col, Color.white)); // Fallback position
         }
 
         // 2. Move down by 1 block each iteration
-        List<(int, int)> lastCoords = new(); // last valid coords
+        List<(int, int, Color)> lastCoords = new(); // last valid coords
         for(int moveY=0; moveY<GameGrid.GRID_HEIGHT; moveY++) {
-            List<(int, int)> newCoords = new();
+            List<(int, int, Color)> newCoords = new();
             bool isBlocked = false;
 
             foreach((int, int) block in segment) {
@@ -92,42 +90,43 @@ class LineClearHandler
 
                 int bx = col;
                 int by = row + moveY;
+                Color color = currentGrid[row, col].Color; // TODO: It seems to work now...
                 
                 if (by > GameGrid.GRID_HEIGHT - 1) 
                     isBlocked = true;
                 else 
-                    if (tempGrid[by, bx] == TileState.PLACED)
+                    if (tempGrid[by, bx].State == TileState.PLACED)
                         isBlocked = true;
 
                 if (!isBlocked)
-                    newCoords.Add((by, bx));
+                    newCoords.Add((by, bx, color));
                 else
                     break;
             }
 
             if(isBlocked) {
                 Debug.Log("Blocked. Copying last valid coords");
-                validCoords = new List<(int, int)>(lastCoords);
+                validCoords = new List<(int, int, Color)>(lastCoords);
                 break;
             }
             else 
-                lastCoords = new List<(int, int)>(newCoords);
+                lastCoords = new List<(int, int, Color)>(newCoords);
         }
         
         // Place blocks in their new position, if any
-        foreach((int, int) coord in validCoords) {
+        foreach((int, int, Color) coord in validCoords) {
             int row = coord.Item1;
             int col = coord.Item2;
-            Debug.Log($"NEW {row}, {col}");
-            tempGrid[row, col] = TileState.PLACED;
+            Color color = coord.Item3;
+            // Debug.Log($"NEW {row}, {col}");
+            tempGrid[row, col] = new Tile(TileState.PLACED, color);
         }   
-
         
-        currentGrid = (TileState[,]) tempGrid.Clone();
+        currentGrid = (Tile[,]) tempGrid.Clone();
         return currentGrid;
     }
 
-    static void MarkSegments(TileState[,] grid, List<List<(int, int)>> allSegments)
+    static void MarkSegments(Tile[,] grid, List<List<(int, int)>> allSegments)
     {
         // -- Search for segments
         for (int row = 0; row < GameGrid.GRID_HEIGHT; row++)
@@ -160,27 +159,27 @@ class LineClearHandler
 
 
         // TODO: Just for debugging purposes
-        int segCount = 0;
-        foreach (List<(int, int)> seg in allSegments)
-        {
-            Debug.Log($"Segment {segCount}");
-            foreach ((int, int) s in seg)
-            {
-                Debug.Log($"{s}");
-            }
+        // int segCount = 0;
+        // foreach (List<(int, int)> seg in allSegments)
+        // {
+        //     Debug.Log($"Segment {segCount}");
+        //     foreach ((int, int) s in seg)
+        //     {
+        //         Debug.Log($"{s}");
+        //     }
 
-            segCount++;
-        }
+        //     segCount++;
+        // }
     }
 
-    static void SearchAdjacent(TileState[,] grid, int row, int col, List<(int, int)> segment)
+    static void SearchAdjacent(Tile[,] grid, int row, int col, List<(int, int)> segment)
     {
         bool visited = segment.Contains((row, col));
 
         // Lazy fix
         try
         {
-            if (grid[row, col] == TileState.FREE || visited)
+            if (grid[row, col].State == TileState.FREE || visited)
                 return;
         }
         catch (IndexOutOfRangeException e)

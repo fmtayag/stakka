@@ -65,6 +65,7 @@ public class GameController : MonoBehaviour
             Debug.Log("Pressed Down");
             axisVerti = 1;
             goDownTimer = Time.time; // Reset timer
+            canLock = true; // TODO: notice me if things go to shit
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow)) {
             Debug.Log("Pressed 'Rotate' key");
@@ -87,7 +88,7 @@ public class GameController : MonoBehaviour
                 int bx = blocks[row, 0];
                 int by = blocks[row, 1];
 
-                gameGrid.Grid[oldYPos+by, oldXPos+bx] = TileState.FREE;
+                gameGrid.Grid[oldYPos+by, oldXPos+bx].State = TileState.FREE;
             }
 
             tetro = dbgTetros[dbgIndex];
@@ -99,7 +100,7 @@ public class GameController : MonoBehaviour
 
     void PlaceTetro()
     {   
-        // Automatically go down after 1000ms
+        // Automatically go down after some specified time
         float now = Time.time;
 
         if (now - goDownTimer >= goDownDelay) {
@@ -120,7 +121,7 @@ public class GameController : MonoBehaviour
             {
                 int bx = blocks[row, 0];
                 int by = blocks[row, 1];
-                gameGrid.Grid[(int)(tetro.position.y + by), (int)(tetro.position.x + bx)] = TileState.BLOCK;
+                gameGrid.Grid[(int)(tetro.position.y + by), (int)(tetro.position.x + bx)] = new Tile(TileState.BLOCK, tetro.myColor);
             }
         }
     }
@@ -131,17 +132,17 @@ public class GameController : MonoBehaviour
         {
             for (int x = 0; x < GameGrid.GRID_WIDTH; x++)
             {
-                TileState tile = gameGrid.Grid[y, x];
-                switch (tile)
+                Tile tile = gameGrid.Grid[y, x];
+                switch (tile.State)
                 {
                     case TileState.FREE:
                         gameGrid.DisplayGrid[y, x].GetComponent<Image>().color = Color.white;
                         break;
                     case TileState.BLOCK:
-                        gameGrid.DisplayGrid[y, x].GetComponent<Image>().color = Color.red;
+                        gameGrid.DisplayGrid[y, x].GetComponent<Image>().color = tile.Color;
                         break;
                     case TileState.PLACED:
-                        gameGrid.DisplayGrid[y, x].GetComponent<Image>().color = Color.green;
+                        gameGrid.DisplayGrid[y, x].GetComponent<Image>().color = tile.Color;
                         break;
                     default:
                         break;

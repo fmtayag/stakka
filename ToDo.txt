@@ -1,0 +1,13 @@
+TODO
+
+-- As of now, most of the core mechanics are already here such as moving, line clearing, gravity, and rotation
+- Scoring, checking of gameover are not implemented yet. 
+- (IMPLEMENTED, CURRENTLY TESTING) Different colors 
+- No tetro queue, yet
+- No polish yet
+    - Tetro spawn positions
+    - Game over screen 
+    - Start screen 
+    - 'Pause' after each line clear
+    - No graphics yet
+- Two player functionality not implemented yet

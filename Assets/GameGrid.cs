@@ -1,6 +1,17 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+public struct Tile {
+    public TileState State { get; set; }
+    public Color Color { get; set; }
+
+    public Tile(TileState state, Color color)
+    {
+        State = state;
+        Color = color;
+    }
+};
+
 public enum TileState
 {
     FREE, PLACED, BLOCK
@@ -8,7 +19,7 @@ public enum TileState
 
 public class GameGrid : MonoBehaviour
 {
-    public TileState[,] Grid { get; set; }
+    public Tile[,] Grid { get; set; }
     public GameObject[,] DisplayGrid { get; set; }
     public const short GRID_WIDTH = 10;
     public const short GRID_HEIGHT = 20;
@@ -18,33 +29,39 @@ public class GameGrid : MonoBehaviour
 
     void Start()
     {
-        Grid = new TileState[GRID_HEIGHT, GRID_WIDTH];
+        Grid = new Tile[GRID_HEIGHT, GRID_WIDTH];
         DisplayGrid = new GameObject[GRID_HEIGHT, GRID_WIDTH];
         prefab = GameObject.Find("Image");
         canvas = GameObject.Find("Canvas").transform;
 
-        for(int i=0; i < GameGrid.GRID_WIDTH - 1; i++) {
-            Grid[19, i] = TileState.PLACED; // TODO: Test
-            Grid[18, i] = TileState.PLACED; // TODO: Test
-            Grid[17, i] = TileState.PLACED; // TODO: Test
-            Grid[16, i] = TileState.PLACED; // TODO: Test
+        for(int row=0; row < GameGrid.GRID_HEIGHT; row++) {
+            for (int col=0; col < GameGrid.GRID_WIDTH; col++) {
+                Grid[row, col] = new Tile(TileState.FREE, Color.white);
+            }
         }
-        // Grid[15, 7] = TileState.PLACED;
-        // Grid[15, 6] = TileState.PLACED;
 
-        // Grid[16, 0] = TileState.FREE;
-        // Grid[16, 1] = TileState.FREE;
-        // Grid[16, 2] = TileState.FREE;
+        // for(int i=0; i < GameGrid.GRID_WIDTH - 1; i++) {
+        //     Grid[19, i] = new Tile(TileState.PLACED, Color.blue); // TODO: Test
+        //     Grid[18, i] = new Tile(TileState.PLACED, Color.yellow); // TODO: Test
+        //     Grid[17, i] = new Tile(TileState.PLACED, Color.cyan); // TODO: Test
+        //     Grid[16, i] = new Tile(TileState.PLACED, Color.red); // TODO: Test
+        // }
+        // Grid[15, 7] = new Tile(TileState.PLACED, Color.red);
+        // Grid[15, 6] = new Tile(TileState.PLACED, Color.red);
 
-        // Grid[17, 0] = TileState.FREE;
-        // Grid[17, 1] = TileState.FREE;
-        // Grid[17, 6] = TileState.FREE;
-        // Grid[17, 7] = TileState.FREE;
+        // Grid[16, 0] = new Tile(TileState.PLACED, Color.red);
+        // Grid[16, 1] = new Tile(TileState.PLACED, Color.red);
+        // Grid[16, 2] = new Tile(TileState.PLACED, Color.red);
 
-        // Grid[18, 0] = TileState.FREE;
-        // Grid[18, 7] = TileState.FREE;
+        // Grid[17, 0] = new Tile(TileState.PLACED, Color.red);
+        // Grid[17, 1] = new Tile(TileState.PLACED, Color.red);
+        // Grid[17, 6] = new Tile(TileState.PLACED, Color.red);
+        // Grid[17, 7] = new Tile(TileState.PLACED, Color.red);
 
-        // Grid[19, 0] = TileState.FREE;
+        // Grid[18, 0] = new Tile(TileState.PLACED, Color.red);
+        // Grid[18, 7] = new Tile(TileState.PLACED, Color.red);
+
+        // Grid[19, 0] = new Tile(TileState.PLACED, Color.red);
 
         CreateDisplayGrid();
     }
