@@ -16,11 +16,10 @@ public class GameController : MonoBehaviour
     bool canLock = false;
 
     float inputTimer;
-    const float initInputDelay = 0.4f;
+    const float initInputDelay = 0.6f;
     const float fastInputDelay = 0.05f;
     float inputDelay = initInputDelay;
-    bool initialInputLeft = true;
-    bool initialInputRight = true;
+    bool initialInput = true;
 
     void Start()
     {
@@ -58,14 +57,10 @@ public class GameController : MonoBehaviour
     {
         axisVerti = 0;
         float now = Time.time;
-        bool leftPressed = Input.GetKey(KeyCode.LeftArrow);
-        bool rightPressed = Input.GetKey(KeyCode.RightArrow);
-        if (Input.GetKeyDown(KeyCode.LeftArrow)) {
-            inputTimer = now;
-            axisHori = -1;
-            initialInputLeft = true;
-        }
-        if (leftPressed)
+        // TODO: Precise inputs (DONE, me thinks)
+        // TODO: Hold inputs (DONE, me thinks)
+
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
             if (now - inputTimer >= inputDelay) {
                 inputTimer = now;
@@ -73,21 +68,10 @@ public class GameController : MonoBehaviour
                 axisHori = -1;
             }
             else {
-                if (!initialInputLeft)
-                {
-                    axisHori = 0;
-                }
-                else 
-                    initialInputLeft = false;
+                axisHori = 0;
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.RightArrow)) {
-            inputTimer = now;
-            axisHori = 1;
-            initialInputRight = true;
-        }
-        if (Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.RightArrow))
         {
             if (now - inputTimer >= inputDelay) {
                 inputTimer = now;
@@ -95,23 +79,21 @@ public class GameController : MonoBehaviour
                 axisHori = 1;
             }
             else {
-                if (!initialInputRight)
-                {
-                    axisHori = 0;
-                }
-                else 
-                    initialInputRight = false;
+                axisHori = 0;
             }
         }
 
-        if(Input.GetKeyUp(KeyCode.LeftArrow)) {
+        if(Input.GetKeyDown(KeyCode.LeftArrow))
+            axisHori = -1;
+        else if(Input.GetKeyDown(KeyCode.RightArrow))
+            axisHori = 1;
+
+        if(Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow)) {
             inputDelay = initInputDelay;
             inputTimer = Time.time;
         }
-        if(Input.GetKeyUp(KeyCode.LeftArrow)) {
-            inputDelay = initInputDelay;
-            inputTimer = Time.time;
-        }
+
+        axisHori = Mathf.Clamp(axisHori, -1, 1);
          
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
