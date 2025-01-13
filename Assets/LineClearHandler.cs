@@ -72,7 +72,7 @@ class LineClearHandler
 
     static TileState[,] MoveSegmentDown(TileState[,] currentGrid, List<(int, int)> segment)
     {
-        // TODO: Test and debug later: TetroLima does not move down
+        // TODO: Test and debug later
         TileState[,] tempGrid = (TileState[,])currentGrid.Clone();
         List<(int, int)> validCoords = new();
 
