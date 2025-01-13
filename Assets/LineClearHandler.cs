@@ -14,12 +14,12 @@ class LineClearHandler
         // Optimization idea: Run only when there is input
 
         // Scan for cleared rows
-        bool isLineClear = true;
-        bool[] clearedRows = new bool[20]; // TODO: Replace with list
         const int MAX_PASSES = 3;
         int pass = 0;
+        // bool[] clearedRows = new bool[20]; // TODO: Replace with list
 
         while(pass < MAX_PASSES) {
+            bool isLineClear = true;
             for (int row = 0; row < GameGrid.GRID_HEIGHT; row++)
             {
                 for (int col = 0; col < GameGrid.GRID_WIDTH; col++)
@@ -38,35 +38,29 @@ class LineClearHandler
                 if (isLineClear)
                 {
                     Debug.Log($"Cleared row: {row}");
-                    clearedRows[row] = true;
-                    // TODO: Test remove
+                    // clearedRows[row] = true;
+                    // // TODO: Test remove
                     for (int col = 0; col < GameGrid.GRID_WIDTH; col++)
                     {
                         grid[row, col] = TileState.FREE;
                     }
 
-                    break;
+                     // 1. Mark segments
+                    Debug.Log("Marking segments");
+                    List<List<(int, int)>> allSegments = new();
+                    MarkSegments(grid, allSegments);
+
+                    // 2. Shift down rows to fill the gaps created by removed rows  
+                    foreach(List<(int, int)> segment in allSegments) {
+                        grid = MoveSegmentDown(grid, segment);
+                    }   
+
+                    // break;
                 }
             }
-
-            if (isLineClear) // TODO: Replace this with something else or not.
-            {
-                // 1. Mark segments
-                Debug.Log("Marking segments");
-                List<List<(int, int)>> allSegments = new();
-                MarkSegments(grid, allSegments);
-
-                // 2. Shift down rows to fill the gaps created by removed rows  
-                foreach(List<(int, int)> segment in allSegments) {
-                    grid = MoveSegmentDown(grid, segment);
-                }   
-                
-            }
-            
             pass++;
         }
         
-
         return grid;
     }
 

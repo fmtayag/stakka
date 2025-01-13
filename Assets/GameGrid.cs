@@ -23,28 +23,28 @@ public class GameGrid : MonoBehaviour
         prefab = GameObject.Find("Image");
         canvas = GameObject.Find("Canvas").transform;
 
-        for(int i=0; i < 10; i++) {
+        for(int i=0; i < GameGrid.GRID_WIDTH - 1; i++) {
             Grid[19, i] = TileState.PLACED; // TODO: Test
             Grid[18, i] = TileState.PLACED; // TODO: Test
             Grid[17, i] = TileState.PLACED; // TODO: Test
             Grid[16, i] = TileState.PLACED; // TODO: Test
         }
-        Grid[15, 7] = TileState.PLACED;
-        Grid[15, 6] = TileState.PLACED;
+        // Grid[15, 7] = TileState.PLACED;
+        // Grid[15, 6] = TileState.PLACED;
 
-        Grid[16, 0] = TileState.FREE;
-        Grid[16, 1] = TileState.FREE;
-        Grid[16, 2] = TileState.FREE;
+        // Grid[16, 0] = TileState.FREE;
+        // Grid[16, 1] = TileState.FREE;
+        // Grid[16, 2] = TileState.FREE;
 
-        Grid[17, 0] = TileState.FREE;
-        Grid[17, 1] = TileState.FREE;
-        Grid[17, 6] = TileState.FREE;
-        Grid[17, 7] = TileState.FREE;
+        // Grid[17, 0] = TileState.FREE;
+        // Grid[17, 1] = TileState.FREE;
+        // Grid[17, 6] = TileState.FREE;
+        // Grid[17, 7] = TileState.FREE;
 
-        Grid[18, 0] = TileState.FREE;
-        Grid[18, 7] = TileState.FREE;
+        // Grid[18, 0] = TileState.FREE;
+        // Grid[18, 7] = TileState.FREE;
 
-        Grid[19, 0] = TileState.FREE;
+        // Grid[19, 0] = TileState.FREE;
 
         CreateDisplayGrid();
     }
