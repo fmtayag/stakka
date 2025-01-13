@@ -2,7 +2,11 @@ TODO
 
 -- As of now, most of the core mechanics are already here such as moving, line clearing, gravity, and rotation
 - Scoring, checking of gameover are not implemented yet. 
+    - Implement original SEGA scoring system (see: https://tetris.wiki/Scoring)
 - (IMPLEMENTED, CURRENTLY TESTING) Different colors 
+- Smoother input
+    - Horizontal (Semi-implemented. Bug when spamming left and right)
+    - Vertical
 - No tetro queue, yet
 - No polish yet
     - Tetro spawn positions
