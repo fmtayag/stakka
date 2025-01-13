@@ -15,11 +15,13 @@ public class GameController : MonoBehaviour
     float goDownDelay = 1f;
     bool canLock = false;
 
-    float inputTimer;
     const float initInputDelay = 0.6f;
     const float fastInputDelay = 0.05f;
     float inputDelay = initInputDelay;
-    bool initialInput = true;
+    float inputTimer;
+
+    float inputVertDelay = initInputDelay;
+    float inputVertTimer;
 
     void Start()
     {
@@ -40,6 +42,7 @@ public class GameController : MonoBehaviour
 
         goDownTimer = Time.time;
         inputTimer = 0;
+        inputVertTimer = 0;
     }
 
     void Update()
@@ -88,20 +91,39 @@ public class GameController : MonoBehaviour
         else if(Input.GetKeyDown(KeyCode.RightArrow))
             axisHori = 1;
 
-        if(Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow)) {
-            inputDelay = initInputDelay;
-            inputTimer = Time.time;
+        // Vertical movement
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            if (now - inputVertTimer >= inputVertDelay) {
+                inputVertTimer = now;
+                inputVertDelay = fastInputDelay;
+                axisVerti = 1;
+                goDownTimer = Time.time; // Reset timer
+                canLock = true; // TODO: notice me if things go to shit
+            }
+            else {
+                axisVerti = 0;
+            }
         }
-
-        axisHori = Mathf.Clamp(axisHori, -1, 1);
-         
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            Debug.Log("Pressed Down");
             axisVerti = 1;
             goDownTimer = Time.time; // Reset timer
             canLock = true; // TODO: notice me if things go to shit
         }
+
+        if(Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow)) {
+            inputDelay = initInputDelay;
+            inputTimer = Time.time;
+        }
+        if(Input.GetKeyUp(KeyCode.DownArrow)) {
+            inputVertDelay = initInputDelay;
+            inputVertTimer = Time.time;
+        }
+
+        Debug.Log($"{axisHori}, {axisVerti}");
+
+
         if (Input.GetKeyDown(KeyCode.UpArrow)) {
             Debug.Log("Pressed 'Rotate' key");
             tetro.Rotate(gameGrid.Grid);
@@ -139,8 +161,8 @@ public class GameController : MonoBehaviour
         float now = Time.time;
 
         if (now - goDownTimer >= goDownDelay) {
-            // axisVerti = 1;
-            axisVerti = 0;
+            axisVerti = 1;
+            // axisVerti = 0;
             goDownTimer = now;
             canLock = true;
         }

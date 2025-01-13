@@ -5,8 +5,9 @@ TODO
     - Implement original SEGA scoring system (see: https://tetris.wiki/Scoring)
 - (IMPLEMENTED, CURRENTLY TESTING) Different colors 
 - Smoother input
-    - Horizontal (Semi-implemented. Bug when spamming left and right)
-    - Vertical
+    - Horizontal (DONE)
+    - Vertical (DONE)
+    - Diagonal (STILL NEEDS TESTING)
 - No tetro queue, yet
 - No polish yet
     - Tetro spawn positions
