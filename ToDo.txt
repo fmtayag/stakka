@@ -5,7 +5,7 @@ TODO
     - Implement original SEGA scoring system (see: https://tetris.wiki/Scoring)
     - Concepts: level, number of lines, point for soft dropping piece
 - Levels
-- (IMPLEMENTED, CURRENTLY TESTING) Different colors 
+- (DONE) Different colors 
 - Smoother input
     - Horizontal (DONE)
     - Vertical (DONE)
@@ -20,4 +20,4 @@ TODO
     - Start screen 
     - 'Pause' after each line clear
     - No graphics yet
-- Two player functionality not implemented yet
+- (DISCARD, NO TIME) Two player functionality not implemented yet
