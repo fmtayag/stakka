@@ -5,6 +5,7 @@ TODO
     - Implement original SEGA scoring system (see: https://tetris.wiki/Scoring)
     - Concepts: level, number of lines, point for soft dropping piece
 - Levels
+    - Fixed-goal, in which the level advances every 10 lines cleared.
 - (DONE) Different colors 
 - Smoother input
     - Horizontal (DONE)
@@ -18,6 +19,7 @@ TODO
     - Tetro spawn positions
     - Game over screen 
     - Start screen 
-    - 'Pause' after each line clear
-    - No graphics yet
+    - 'Pause' and 'highlight' after each line clear
+    - Game pausing
+- Design assets
 - (DISCARD, NO TIME) Two player functionality not implemented yet

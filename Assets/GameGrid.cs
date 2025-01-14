@@ -40,12 +40,12 @@ public class GameGrid : MonoBehaviour
             }
         }
 
-        // for(int i=0; i < GameGrid.GRID_WIDTH - 1; i++) {
-        //     Grid[19, i] = new Tile(TileState.PLACED, Color.blue); // TODO: Test
-        //     Grid[18, i] = new Tile(TileState.PLACED, Color.yellow); // TODO: Test
-        //     Grid[17, i] = new Tile(TileState.PLACED, Color.cyan); // TODO: Test
-        //     Grid[16, i] = new Tile(TileState.PLACED, Color.red); // TODO: Test
-        // }
+        for(int i=0; i < GameGrid.GRID_WIDTH - 1; i++) {
+            Grid[19, i] = new Tile(TileState.PLACED, Color.blue); // TODO: Test
+            Grid[18, i] = new Tile(TileState.PLACED, Color.yellow); // TODO: Test
+            Grid[17, i] = new Tile(TileState.PLACED, Color.cyan); // TODO: Test
+            Grid[16, i] = new Tile(TileState.PLACED, Color.red); // TODO: Test
+        }
         // Grid[15, 7] = new Tile(TileState.PLACED, Color.red);
         // Grid[15, 6] = new Tile(TileState.PLACED, Color.red);
 
