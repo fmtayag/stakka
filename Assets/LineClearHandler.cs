@@ -61,7 +61,7 @@ class LineClearHandler
         return grid;
     }
 
-    static Tile[,] MoveSegmentDown(Tile[,] currentGrid, List<(int, int)> segment)
+    public static Tile[,] MoveSegmentDown(Tile[,] currentGrid, List<(int, int)> segment)
     {
         // TODO: Test and debug later
         Tile[,] tempGrid = (Tile[,])currentGrid.Clone();

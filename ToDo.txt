@@ -3,12 +3,17 @@ TODO
 -- As of now, most of the core mechanics are already here such as moving, line clearing, gravity, and rotation
 - Scoring, checking of gameover are not implemented yet. 
     - Implement original SEGA scoring system (see: https://tetris.wiki/Scoring)
+    - Concepts: level, number of lines, point for soft dropping piece
+- Levels
 - (IMPLEMENTED, CURRENTLY TESTING) Different colors 
 - Smoother input
     - Horizontal (DONE)
     - Vertical (DONE)
     - Diagonal (STILL NEEDS TESTING)
+    - Hard drops (STILL NEEDS TESTING)
 - No tetro queue, yet
+    - bagging system: provide a bag of 7 tetro 
+    - after that is used up, provide another bag of 7 tetro
 - No polish yet
     - Tetro spawn positions
     - Game over screen 

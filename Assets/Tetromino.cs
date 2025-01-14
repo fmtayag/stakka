@@ -245,7 +245,7 @@ public abstract class Tetromino
             }
 
             // TODO: 'Reset the tetromino'
-            position = new Vector2(3, 3); 
+            position = new Vector2(5, 3); 
 
             return (Tile[,])newGrid.Clone();
         }
