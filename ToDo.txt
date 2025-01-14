@@ -1,17 +1,24 @@
-TODO
+TODO -- As of now, most of the core mechanics are already here such as moving, line clearing, gravity, and rotation
 
--- As of now, most of the core mechanics are already here such as moving, line clearing, gravity, and rotation
+** Doing --
+- 'Pause' and 'highlight' after each line clear (STILL NEEDS TESTING)
+    Info needed: The rows to be cleared
+    Process:
+        - Get the rows to be cleared (DONE)
+        - Pause game processes (DONE)
+            - Pause input and tetro movement (DONE)
+        - Overlay a 'fake' grid that is a copy of the current game grid (DONE)
+        - Play the 'highlight' and 'remove' rows animation (around 400ms - 600ms) (DONE)
+        - After animation is done, remove the 'fake' overlay grid (DONE)
+        - Update the current game grid with the rows cleared (DONE)
+        - Resume all game process (DONE)
+
+** TODO --
 - Scoring, checking of gameover are not implemented yet. 
     - Implement original SEGA scoring system (see: https://tetris.wiki/Scoring)
     - Concepts: level, number of lines, point for soft dropping piece
 - Levels
     - Fixed-goal, in which the level advances every 10 lines cleared.
-- (DONE) Different colors 
-- Smoother input
-    - Horizontal (DONE)
-    - Vertical (DONE)
-    - Diagonal (STILL NEEDS TESTING)
-    - Hard drops (STILL NEEDS TESTING)
 - No tetro queue, yet
     - bagging system: provide a bag of 7 tetro 
     - after that is used up, provide another bag of 7 tetro
@@ -19,7 +26,14 @@ TODO
     - Tetro spawn positions
     - Game over screen 
     - Start screen 
-    - 'Pause' and 'highlight' after each line clear
     - Game pausing
-- Design assets
+- Design the assets
+
+** Done/Discard --
 - (DISCARD, NO TIME) Two player functionality not implemented yet
+- (DONE) Different colors 
+- (DONE) Smoother input
+    - Horizontal (DONE)
+    - Vertical (DONE)
+    - Diagonal (DONE)
+    - Hard drops (DONE)

@@ -6,59 +6,61 @@ using UnityEngine.WSA;
 
 class LineClearHandler
 {
-    public static Tile[,] Handle(Tile[,] grid)
+    public static Tile[,] Handle(Tile[,] grid, List<int> fullRows)
     {
-        // DONE: Check for cleared rows
-        // DONE: Shift down the rows above the cleared rows
-        // Optimization idea: Check only from the topmost row to the bottom row
-        // Optimization idea: Run only when there is input
-
-        // Scan for cleared rows
-        const int MAX_PASSES = 3; // to check for cascading line clears
-        int pass = 0;
-
-        while(pass < MAX_PASSES) {
-            bool isLineClear = true;
-            for (int row = 0; row < GameGrid.GRID_HEIGHT; row++)
+        
+        foreach(int row in fullRows) {
+            // Debug.Log($"Cleared row: {row}");
+            // Remove cleared rows
+            for (int col = 0; col < GameGrid.GRID_WIDTH; col++)
             {
-                for (int col = 0; col < GameGrid.GRID_WIDTH; col++)
-                {
-                    if (grid[row, col].State != TileState.PLACED)
-                    {
-                        isLineClear = false;
-                        break;
-                    }
-                    else
-                    {
-                        isLineClear = true;
-                    }
-                }
-
-                if (isLineClear)
-                {
-                    Debug.Log($"Cleared row: {row}");
-                    // Remove cleared rows
-                    for (int col = 0; col < GameGrid.GRID_WIDTH; col++)
-                    {
-                        grid[row, col].State = TileState.FREE;
-                        grid[row, col].Color = Color.black;
-                    }
-
-                     // 1. Mark segments
-                    Debug.Log("Marking segments");
-                    List<List<(int, int)>> allSegments = new();
-                    MarkSegments(grid, allSegments);
-
-                    // 2. Shift down rows to fill the gaps created by removed rows  
-                    foreach(List<(int, int)> segment in allSegments) {
-                        grid = MoveSegmentDown(grid, segment);
-                    }   
-                }
+                grid[row, col].State = TileState.FREE;
+                grid[row, col].Color = Color.white;
             }
-            pass++;
+
+            // 1. Mark segments
+            // Debug.Log("Marking segments");
+            List<List<(int, int)>> allSegments = new();
+            MarkSegments(grid, allSegments);
+
+            // 2. Shift down rows to fill the gaps created by removed rows  
+            foreach(List<(int, int)> segment in allSegments) {
+                grid = MoveSegmentDown(grid, segment);
+            }   
+
         }
         
         return grid;
+
+    }
+
+    public static List<int> ScanFullRows(Tile[,] grid) {
+        // Scan for full rows
+        bool isLineClear = true;
+        List<int> fullRows = new();
+
+        for (int row = 0; row < GameGrid.GRID_HEIGHT; row++)
+        {   
+            // Go through each tile in this row. If even a single tile is not 'placed' then skip
+            for (int col = 0; col < GameGrid.GRID_WIDTH; col++)
+            {
+                if (grid[row, col].State != TileState.PLACED)
+                {
+                    isLineClear = false;
+                    break;
+                }
+                else
+                    isLineClear = true;
+            }
+
+            // If all tiles in the row are placed, then append the row to fullRows
+            if (isLineClear)
+            {   
+                fullRows.Add(row);
+            }
+        }
+
+        return fullRows;
     }
 
     public static Tile[,] MoveSegmentDown(Tile[,] currentGrid, List<(int, int)> segment)
