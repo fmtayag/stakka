@@ -84,6 +84,13 @@ class GameInput {
         }
 
         // -- Vertical movement
+        if (Input.GetKeyDown(KeyCode.DownArrow)) 
+        {
+            axisVerti = 1;
+            gravityTimer = Time.time; // Reset timer
+            canLock = true; // TODO: notice me if things go to shit
+        }
+
         if (Input.GetKey(KeyCode.DownArrow))
         {
             if (now - inputVertTimer >= inputVertDelay)
@@ -91,21 +98,9 @@ class GameInput {
                 inputVertTimer = now;
                 inputVertDelay = fastInputDelay;
                 axisVerti = 1;
-                // goDownTimer = Time.time; // Reset timer
+                // gravityTimer = Time.time; // Reset timer
                 canLock = true; // TODO: notice me if things go to shit
             }
-            else
-            {
-                axisVerti = 0;
-            }
-        }
-
-        // -- Drops
-        if (Input.GetKeyDown(KeyCode.DownArrow)) // Soft drop
-        {
-            axisVerti = 1;
-            gravityTimer = Time.time; // Reset timer
-            canLock = true; // TODO: notice me if things go to shit
         }
 
         if (Input.GetKeyUp(KeyCode.DownArrow))
@@ -175,22 +170,7 @@ class GameInput {
                 gameGrid.Grid = tetro.Move(gameGrid.Grid, axisHori, axisVerti, canLock);
             else
             {
-                // Convert tetro into a "segment"
-                List<(int, int)> myTetro = new List<(int, int)>();
-                for (int i = 0; i < 4; i++)
-                {
-                    int bx = (int)tetro.position.x + tetro.GetBlocks(tetro.rotation)[i, 0];
-                    int by = (int)tetro.position.y + tetro.GetBlocks(tetro.rotation)[i, 1];
-
-                    myTetro.Add((by, bx));
-                }
-
-                gameGrid.Grid = LineClearHandler.MoveSegmentDown(gameGrid.Grid, myTetro);
-
-                isHardDropping = false;
-
-                // TODO: 'Reset the tetromino'
-                tetro.position = new Vector2(5, 3); 
+                DoHardDrop(gameGrid, tetro);
             }
         }
         else
@@ -204,5 +184,24 @@ class GameInput {
                 gameGrid.Grid[(int)(tetro.position.y + by), (int)(tetro.position.x + bx)] = new Tile(TileState.BLOCK, tetro.myColor);
             }
         }
+    }
+
+    void DoHardDrop(GameGrid gameGrid, Tetromino tetro) {
+        // Convert tetro into a "segment"
+        List<(int, int)> myTetro = new List<(int, int)>();
+        for (int i = 0; i < 4; i++)
+        {
+            int bx = (int)tetro.position.x + tetro.GetBlocks(tetro.rotation)[i, 0];
+            int by = (int)tetro.position.y + tetro.GetBlocks(tetro.rotation)[i, 1];
+
+            myTetro.Add((by, bx));
+        }
+
+        gameGrid.Grid = LineClearHandler.MoveSegmentDown(gameGrid.Grid, myTetro);
+
+        isHardDropping = false;
+
+        // TODO: 'Reset the tetromino'
+        tetro.position = new Vector2(5, 3); 
     }
 }

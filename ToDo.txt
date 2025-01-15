@@ -1,22 +1,23 @@
 TODO -- As of now, most of the core mechanics are already here such as moving, line clearing, gravity, and rotation
 
 ** Doing --
-
-** TODO --
 - Tetro spawn positions
 - Checking of game over
+
+** TODO --
+- Design the assets
 - No tetro queue, yet
     - bagging system: provide a bag of 7 tetro 
     - after that is used up, provide another bag of 7 tetro
-- No polish yet
+- Polishing:
     - Game over screen 
     - Start screen 
     - Game pausing
-    - a hard drop "target" 
+    - a drop target box
 - Bug fixing:
-    - Tetro is "hard dropped" when there is more than one consecutive line clear 
-    - Tetro sometimes "sticks" to the walls and is not affected by gravity
-- Design the assets
+    - BUG01: Tetro is "hard dropped" when there is more than one consecutive line clear 
+    - BUG02: Tetro sometimes "sticks" to the walls or other blocks, and is not affected by gravity
+
 
 ** Done/Discard --
 - Scoring (DONE)
