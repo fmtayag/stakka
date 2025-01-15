@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour
     int dbgIndex;
     GameControllerState myState;
     PlayerInfo pInfo;
+    public Sprite testTile; // TODO: test
 
     // For line clearing animation
     List<int> fullRows;
@@ -32,7 +33,7 @@ public class GameController : MonoBehaviour
         GameObject obj = new GameObject("GameGridObject");
         gameGrid = obj.AddComponent<GameGrid>();
 
-        dbgIndex = 2;
+        dbgIndex = 3;
         dbgTetros = new Tetromino[] {
             new TetroTango(),
             new TetroOscar(),
@@ -74,7 +75,7 @@ public class GameController : MonoBehaviour
                 }
 
                 // gameGrid.Grid = LineClearHandler.Handle(gameGrid.Grid, fullRows);
-                DrawGrid(gameGrid.Grid);
+                UpdateDisplayGrid(gameGrid.Grid);
 
                 break;
             case GameControllerState.LINECLEAR_ANIMATION:
@@ -148,10 +149,10 @@ public class GameController : MonoBehaviour
             }
         }
 
-        DrawGrid(overlayGrid);
+        UpdateDisplayGrid(overlayGrid);
     }
 
-    void DrawGrid(Tile[,] grid)
+    void UpdateDisplayGrid(Tile[,] grid)
     {
         for (int y = 0; y < GameGrid.GRID_HEIGHT; y++)
         {
@@ -161,13 +162,19 @@ public class GameController : MonoBehaviour
                 switch (tile.State)
                 {
                     case TileState.FREE:
-                        gameGrid.DisplayGrid[y, x].GetComponent<Image>().color = Color.white;
+                        gameGrid.DisplayGrid[y, x].GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
+                        // gameGrid.DisplayGrid[y, x].GetComponent<Image>().sprite = null;
                         break;
                     case TileState.BLOCK:
                         gameGrid.DisplayGrid[y, x].GetComponent<Image>().color = tile.Color;
+                        // gameGrid.DisplayGrid[y, x].GetComponent<Image>().sprite = testTile;
+
                         break;
                     case TileState.PLACED:
                         gameGrid.DisplayGrid[y, x].GetComponent<Image>().color = tile.Color;
+                        // gameGrid.DisplayGrid[y, x].GetComponent<Image>().sprite = testTile;
+                        
+                        
                         break;
                     default:
                         break;

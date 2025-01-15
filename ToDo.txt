@@ -1,11 +1,11 @@
 TODO -- As of now, most of the core mechanics are already here such as moving, line clearing, gravity, and rotation
 
 ** Doing --
-- Tetro spawn positions
-- Checking of game over
+- Design the assets
 
 ** TODO --
-- Design the assets
+- Tetro spawn positions
+- Checking of game over
 - No tetro queue, yet
     - bagging system: provide a bag of 7 tetro 
     - after that is used up, provide another bag of 7 tetro
@@ -15,11 +15,10 @@ TODO -- As of now, most of the core mechanics are already here such as moving, l
     - Game pausing
     - a drop target box
 - Bug fixing:
-    - BUG01: Tetro is "hard dropped" when there is more than one consecutive line clear 
     - BUG02: Tetro sometimes "sticks" to the walls or other blocks, and is not affected by gravity
 
-
 ** Done/Discard --
+- (FIXED) BUG01: Tetro is "hard dropped" when there is more than one consecutive line clear 
 - Scoring (DONE)
     - (DISCARD) Original SEGA scoring system (see: https://tetris.wiki/Scoring)
     - Concepts: level, number of lines, point for soft dropping piece 

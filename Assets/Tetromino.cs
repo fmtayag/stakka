@@ -268,7 +268,7 @@ public abstract class Tetromino
 public class TetroTango : Tetromino
 {
     public TetroTango() {
-        myColor = Color.magenta;
+        myColor = GameDefines.COLOR_TANGO;
     }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -311,7 +311,7 @@ public class TetroTango : Tetromino
 public class TetroOscar : Tetromino
 {
     public TetroOscar() {
-        myColor = Color.yellow;
+        myColor = GameDefines.COLOR_OSCAR;
     }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -327,7 +327,7 @@ public class TetroOscar : Tetromino
 public class TetroIndia : Tetromino
 {
     public TetroIndia() {
-        myColor = Color.cyan;
+        myColor = GameDefines.COLOR_INDIA;
     }    
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -358,7 +358,7 @@ public class TetroIndia : Tetromino
 public class TetroJuliett : Tetromino
 {
     public TetroJuliett() {
-        myColor = Color.blue;
+        myColor = GameDefines.COLOR_JULIETT;
     }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -400,7 +400,7 @@ public class TetroJuliett : Tetromino
 public class TetroLima : Tetromino
 {
     public TetroLima() {
-        myColor = new Color(198f / 255f, 156f / 255f , 4f / 255f, 1f);
+        myColor = GameDefines.COLOR_LIMA;
     }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -442,7 +442,7 @@ public class TetroLima : Tetromino
 public class TetroSierra : Tetromino
 {
     public TetroSierra() {
-        myColor = Color.green;
+        myColor = GameDefines.COLOR_SIERRA;
     }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -472,7 +472,7 @@ public class TetroSierra : Tetromino
 public class TetroZulu : Tetromino
 {
     public TetroZulu() {
-        myColor = Color.red;
+        myColor = GameDefines.COLOR_ZULU;
     }
     public override int[,] GetBlocks(Rotation on_rotation)
     {

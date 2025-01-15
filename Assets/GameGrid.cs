@@ -40,29 +40,29 @@ public class GameGrid : MonoBehaviour
             }
         }
 
-        for(int i=0; i < GameGrid.GRID_WIDTH - 1; i++) {
-            Grid[19, i] = new Tile(TileState.PLACED, Color.blue); // TODO: Test
-            Grid[18, i] = new Tile(TileState.PLACED, Color.yellow); // TODO: Test
-            Grid[17, i] = new Tile(TileState.PLACED, Color.cyan); // TODO: Test
-            Grid[16, i] = new Tile(TileState.PLACED, Color.red); // TODO: Test
+        for(int i=0; i < GameGrid.GRID_WIDTH; i++) {
+            Grid[19, i] = new Tile(TileState.PLACED, GameDefines.COLOR_LIMA); // TODO: Test
+            Grid[18, i] = new Tile(TileState.PLACED, GameDefines.COLOR_LIMA); // TODO: Test
+            Grid[17, i] = new Tile(TileState.PLACED, GameDefines.COLOR_LIMA); // TODO: Test
+            Grid[16, i] = new Tile(TileState.PLACED, GameDefines.COLOR_LIMA); // TODO: Test
         }
 
-        Grid[15, 7] = new Tile(TileState.PLACED, Color.red);
-        Grid[15, 6] = new Tile(TileState.PLACED, Color.red);
+        Grid[15, 7] = new Tile(TileState.FREE, GameDefines.COLOR_LIMA);
+        Grid[15, 6] = new Tile(TileState.FREE, GameDefines.COLOR_LIMA);
 
-        Grid[16, 0] = new Tile(TileState.PLACED, Color.red);
-        Grid[16, 1] = new Tile(TileState.PLACED, Color.red);
-        Grid[16, 2] = new Tile(TileState.PLACED, Color.red);
+        Grid[16, 0] = new Tile(TileState.FREE, GameDefines.COLOR_INDIA);
+        Grid[16, 1] = new Tile(TileState.FREE, GameDefines.COLOR_INDIA);
+        Grid[16, 2] = new Tile(TileState.FREE, GameDefines.COLOR_JULIETT);
 
-        Grid[17, 0] = new Tile(TileState.PLACED, Color.red);
-        Grid[17, 1] = new Tile(TileState.PLACED, Color.red);
-        Grid[17, 6] = new Tile(TileState.PLACED, Color.red);
-        Grid[17, 7] = new Tile(TileState.PLACED, Color.red);
+        Grid[17, 0] = new Tile(TileState.FREE, GameDefines.COLOR_JULIETT);
+        Grid[17, 1] = new Tile(TileState.FREE, GameDefines.COLOR_SIERRA);
+        Grid[17, 6] = new Tile(TileState.FREE, GameDefines.COLOR_SIERRA);
+        Grid[17, 7] = new Tile(TileState.FREE, GameDefines.COLOR_TANGO);
 
-        Grid[18, 0] = new Tile(TileState.PLACED, Color.red);
-        Grid[18, 7] = new Tile(TileState.PLACED, Color.red);
+        Grid[18, 0] = new Tile(TileState.FREE, GameDefines.COLOR_TANGO);
+        Grid[18, 7] = new Tile(TileState.FREE, GameDefines.COLOR_OSCAR);
 
-        Grid[19, 0] = new Tile(TileState.PLACED, Color.red);
+        Grid[19, 0] = new Tile(TileState.FREE, GameDefines.COLOR_OSCAR);
 
         CreateDisplayGrid();
     }
@@ -71,21 +71,28 @@ public class GameGrid : MonoBehaviour
 
     private void CreateDisplayGrid() {
         // Create the display grid
-        for (int y = 0; y < 20; y++)
+        for (int y = 0; y < GameGrid.GRID_HEIGHT; y++)
         {
-            for (int x = 0; x < 10; x++)
+            for (int x = 0; x < GameGrid.GRID_WIDTH; x++)
             {
-                Vector2 origPos = new Vector2(-100, -500);
+                Vector2 origPos = new Vector2(-100, -300);
                 GameObject newImg = Instantiate(prefab, Vector3.zero, Quaternion.identity, canvas);
 
                 RectTransform rectTransform = newImg.GetComponent<RectTransform>();
-                float size = rectTransform.rect.height;
-                float offset = 10;
+                // float size = rectTransform.rect.height;
+                float size = 32;
+                float spacing = 0;
+                float offset_y = 16;
                 rectTransform.anchoredPosition = new Vector2(
-                    (x * size) + (x * offset), 
-                    (GRID_HEIGHT-y) * (size + offset) 
+                    (x * size) + (x * spacing), 
+                    (GRID_HEIGHT-y) * (size + spacing)
                     // (GRID_HEIGHT-y) explanation: Invert the y axis such that the tiles are drawn from the Top-Left
                 ) + origPos;
+
+                newImg.transform.SetSiblingIndex(y); // for draw ordering, makes it so that a row overlaps the row below it
+
+                // TODO: Just for messing around
+                // rectTransform.localScale = new Vector3(1f + (y*0.1f), 1f + (y*0.1f), 0);
 
                 DisplayGrid[y, x] = newImg;
                 // Grid.SetObject(y, x, newImg);

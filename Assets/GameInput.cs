@@ -166,10 +166,11 @@ class GameInput {
 
         if (axisHori != 0 || axisVerti != 0 || isHardDropping)
         {
-            if (!isHardDropping)
+            if (!isHardDropping) 
                 gameGrid.Grid = tetro.Move(gameGrid.Grid, axisHori, axisVerti, canLock);
             else
             {
+                Debug.Log("Doing hard drop");
                 DoHardDrop(gameGrid, tetro);
             }
         }

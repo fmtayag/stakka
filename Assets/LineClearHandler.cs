@@ -73,7 +73,7 @@ class LineClearHandler
         foreach((int, int) block in segment) {
             int row = block.Item1;
             int col = block.Item2;
-            // Debug.Log($"FREEING {row}, {col}");
+            Debug.Log($"FREEING {row}, {col}");
             tempGrid[row, col].State = TileState.FREE;
             tempGrid[row, col].Color = Color.white;
 
@@ -120,7 +120,7 @@ class LineClearHandler
             int row = coord.Item1;
             int col = coord.Item2;
             Color color = coord.Item3;
-            // Debug.Log($"NEW {row}, {col}");
+            Debug.Log($"NEW {row}, {col}");
             tempGrid[row, col] = new Tile(TileState.PLACED, color);
         }   
         
@@ -188,8 +188,11 @@ class LineClearHandler
         {
             return;
         }
-
-        segment.Add((row, col));
+        
+        if (grid[row, col].State == TileState.PLACED)
+            segment.Add((row, col));
+        else
+            return;
 
         // -- Recursive flood fill
         SearchAdjacent(grid, row, col - 1, segment); // Search left
