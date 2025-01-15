@@ -4,8 +4,19 @@ using UnityEngine;
 class GameInput {
     int axisHori = 0;
     int axisVerti = 0;
-    float goDownTimer;
-    float goDownDelay = 1f;
+    float gravityTimer;
+    private float _gravityDelay;
+    public float GravityDelay
+    {
+        get
+        {
+            return _gravityDelay;
+        }
+        set
+        {
+            _gravityDelay = Mathf.Clamp(value, GameDefines.MIN_GRAVITY_DELAY, GameDefines.DEFAULT_GRAVITY_DELAY);
+        }
+    }
     bool canLock = false;
 
     const float initInputDelay = 0.6f;
@@ -18,7 +29,8 @@ class GameInput {
     bool isHardDropping = false;
 
     public GameInput () {
-        goDownTimer = Time.time;
+        gravityTimer = Time.time;
+        GravityDelay = GameDefines.DEFAULT_GRAVITY_DELAY;
         inputTimer = 0;
         inputVertTimer = 0;
     }
@@ -92,7 +104,7 @@ class GameInput {
         if (Input.GetKeyDown(KeyCode.DownArrow)) // Soft drop
         {
             axisVerti = 1;
-            goDownTimer = Time.time; // Reset timer
+            gravityTimer = Time.time; // Reset timer
             canLock = true; // TODO: notice me if things go to shit
         }
 
@@ -149,11 +161,11 @@ class GameInput {
         // Automatically go down after some specified time
         float now = Time.time;
 
-        if (now - goDownTimer >= goDownDelay)
+        if (now - gravityTimer >= GravityDelay)
         {
             axisVerti = 1;
             // axisVerti = 0;
-            goDownTimer = now;
+            gravityTimer = now;
             canLock = true;
         }
 

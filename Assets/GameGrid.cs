@@ -46,22 +46,23 @@ public class GameGrid : MonoBehaviour
             Grid[17, i] = new Tile(TileState.PLACED, Color.cyan); // TODO: Test
             Grid[16, i] = new Tile(TileState.PLACED, Color.red); // TODO: Test
         }
-        // Grid[15, 7] = new Tile(TileState.PLACED, Color.red);
-        // Grid[15, 6] = new Tile(TileState.PLACED, Color.red);
 
-        // Grid[16, 0] = new Tile(TileState.PLACED, Color.red);
-        // Grid[16, 1] = new Tile(TileState.PLACED, Color.red);
-        // Grid[16, 2] = new Tile(TileState.PLACED, Color.red);
+        Grid[15, 7] = new Tile(TileState.PLACED, Color.red);
+        Grid[15, 6] = new Tile(TileState.PLACED, Color.red);
 
-        // Grid[17, 0] = new Tile(TileState.PLACED, Color.red);
-        // Grid[17, 1] = new Tile(TileState.PLACED, Color.red);
-        // Grid[17, 6] = new Tile(TileState.PLACED, Color.red);
-        // Grid[17, 7] = new Tile(TileState.PLACED, Color.red);
+        Grid[16, 0] = new Tile(TileState.PLACED, Color.red);
+        Grid[16, 1] = new Tile(TileState.PLACED, Color.red);
+        Grid[16, 2] = new Tile(TileState.PLACED, Color.red);
 
-        // Grid[18, 0] = new Tile(TileState.PLACED, Color.red);
-        // Grid[18, 7] = new Tile(TileState.PLACED, Color.red);
+        Grid[17, 0] = new Tile(TileState.PLACED, Color.red);
+        Grid[17, 1] = new Tile(TileState.PLACED, Color.red);
+        Grid[17, 6] = new Tile(TileState.PLACED, Color.red);
+        Grid[17, 7] = new Tile(TileState.PLACED, Color.red);
 
-        // Grid[19, 0] = new Tile(TileState.PLACED, Color.red);
+        Grid[18, 0] = new Tile(TileState.PLACED, Color.red);
+        Grid[18, 7] = new Tile(TileState.PLACED, Color.red);
+
+        Grid[19, 0] = new Tile(TileState.PLACED, Color.red);
 
         CreateDisplayGrid();
     }

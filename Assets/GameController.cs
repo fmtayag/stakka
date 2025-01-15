@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour
     Tetromino[] dbgTetros;
     int dbgIndex;
     GameControllerState myState;
+    PlayerInfo pInfo;
 
     // For line clearing animation
     List<int> fullRows;
@@ -45,6 +46,11 @@ public class GameController : MonoBehaviour
         gameInput = new();
         myState = GameControllerState.PLAYING;
         fullRows = new();
+
+        pInfo.Score = 0;
+        pInfo.Level = GameDefines.MIN_LEVEL;
+        // gameInput.GravityDelay = GameDefines.DEFAULT_GRAVITY_DELAY - (GameDefines.GRAVITY_MULTIPLICAND * pInfo.Level);
+
     }
 
     void Update()
@@ -75,6 +81,15 @@ public class GameController : MonoBehaviour
                 if (Time.time - timerAnim0 >= delayAnim0) {
                     myState = GameControllerState.PLAYING;
                     gameGrid.Grid = LineClearHandler.Handle(gameGrid.Grid, fullRows);
+
+                    // Add score
+                    int rowsCleared = fullRows.Count;
+                    pInfo.Score += pInfo.Level * rowsCleared * GameDefines.SCORE_PER_ROW_CLEARED;
+                    pInfo.DoLevelUp(rowsCleared);
+
+                    // Update gravity delay
+                    gameInput.GravityDelay = GameDefines.DEFAULT_GRAVITY_DELAY - (GameDefines.GRAVITY_MULTIPLICAND * pInfo.Level);
+
                     break;
                 }
                 else {
@@ -86,6 +101,8 @@ public class GameController : MonoBehaviour
                 Debug.Log("You're not supposed to reach this state D:");
                 break;
         }
+
+        // Debug.Log($"LEVEL: {pInfo.Level}, Score: {pInfo.Score}, LvProg: {pInfo.LevelProgress}");
        
     }
 
