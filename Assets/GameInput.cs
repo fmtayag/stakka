@@ -158,8 +158,8 @@ class GameInput {
 
         if (now - gravityTimer >= GravityDelay)
         {
-            axisVerti = 1;
-            // axisVerti = 0;
+            // axisVerti = 1;
+            axisVerti = 0;
             gravityTimer = now;
             canLock = true;
         }
@@ -202,7 +202,6 @@ class GameInput {
 
         isHardDropping = false;
 
-        // TODO: 'Reset the tetromino'
-        tetro.position = new Vector2(5, 3); 
+        tetro.Reset();
     }
 }

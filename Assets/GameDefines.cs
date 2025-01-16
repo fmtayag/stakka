@@ -28,4 +28,12 @@ public struct GameDefines {
     public static Color COLOR_LIMA      =   GameUtils.NormalizedColor(255, 217, 125);
     public static Color COLOR_SIERRA    =   GameUtils.NormalizedColor(96,  211, 148);
     public static Color COLOR_ZULU      =   GameUtils.NormalizedColor(238,  96,  85);
+
+    // Spawn positions
+    public static Vector3 SPAWN_POS_T = new Vector3(4, 0);
+    public static Vector3 SPAWN_POS_O = new Vector3(4, 0);
+    public static Vector3 SPAWN_POS_I = new Vector3(5, 0);
+    public static Vector3 SPAWN_POS_J = new Vector3(6, 0);
+    public static Vector3 SPAWN_POS_L = new Vector3(4, 0);
+    public static Vector3 SPAWN_POS_SZ = new Vector3(5, 0);
 }

@@ -13,8 +13,8 @@ public class GameController : MonoBehaviour
     GameGrid gameGrid;
     GameInput gameInput;
     Tetromino tetro;
-    Tetromino[] dbgTetros;
-    int dbgIndex;
+    Tetromino[] myTetros;
+    int index;
     GameControllerState myState;
     PlayerInfo pInfo;
     public List<Sprite> tiles; // TODO: test
@@ -22,6 +22,7 @@ public class GameController : MonoBehaviour
     // For line clearing animation
     List<int> fullRows;
     Tile[,] overlayGrid = new Tile[20, 10]; 
+    List<int> indexBag;
     float timerAnim0 = 0f;
     float delayAnim0 = 0.8f;
     float timerAnim1 = 0f;
@@ -34,8 +35,12 @@ public class GameController : MonoBehaviour
         GameObject obj = new GameObject("GameGridObject");
         gameGrid = obj.AddComponent<GameGrid>();
 
-        dbgIndex = 3;
-        dbgTetros = new Tetromino[] {
+
+        indexBag = new List<int>{0, 1, 2, 3, 4, 5, 6, 7};
+        indexBag.Shuffle();
+        index = 0;
+        
+        myTetros = new Tetromino[] {
             new TetroTango(),
             new TetroOscar(),
             new TetroIndia(),
@@ -44,7 +49,7 @@ public class GameController : MonoBehaviour
             new TetroSierra(),
             new TetroZulu()
         };
-        tetro = dbgTetros[dbgIndex];
+        tetro = myTetros[indexBag[index]];
         gameInput = new();
         myState = GameControllerState.PLAYING;
         fullRows = new();
@@ -57,7 +62,6 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-
         switch(myState) {
             case GameControllerState.PLAYING:
                 gameInput.GetInput(gameGrid, tetro);
@@ -109,7 +113,6 @@ public class GameController : MonoBehaviour
     }
 
     void DrawLineClearAnimation() {
-        // TODO: Do line clear animation here
         float now = Time.time;
 
         // HACK: This is fucking voodoo so don't even try to wrap your head around it

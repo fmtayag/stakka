@@ -7,9 +7,11 @@ public enum Rotation
 
 public abstract class Tetromino
 {
+    public Rotation spawnRotation;
+    public Vector3 spawnPosition;
     public TileColor myColor = TileColor.RED;
     public Rotation rotation = Rotation.LEFT;
-    public Vector3 position = new Vector3(5, 5); // TODO: Test
+    public Vector3 position;
     public void Rotate(Tile[,] currentGrid) {
         /*
         Purpose: Rotate the tetro after ensuring it will not hit a will or a placed block
@@ -245,7 +247,7 @@ public abstract class Tetromino
             }
 
             // TODO: 'Reset the tetromino'
-            position = new Vector2(5, 3); 
+            Reset();
 
             return (Tile[,])newGrid.Clone();
         }
@@ -262,6 +264,10 @@ public abstract class Tetromino
             
     }
 
+    public void Reset() {
+        position = spawnPosition;
+    }
+
     abstract public int[,] GetBlocks(Rotation on_rotation);
 }
 
@@ -269,6 +275,10 @@ public class TetroTango : Tetromino
 {
     public TetroTango() {
         myColor = TileColor.PURPLE;
+        spawnPosition = GameDefines.SPAWN_POS_T;
+        spawnRotation = Rotation.TOP;
+        position = spawnPosition;
+        rotation = spawnRotation;
     }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -312,6 +322,10 @@ public class TetroOscar : Tetromino
 {
     public TetroOscar() {
         myColor = TileColor.YELLOW;
+        spawnPosition = GameDefines.SPAWN_POS_O;
+        spawnRotation = Rotation.TOP; // Doesn't really matter
+        position = spawnPosition;
+        rotation = spawnRotation;
     }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -328,6 +342,10 @@ public class TetroIndia : Tetromino
 {
     public TetroIndia() {
         myColor = TileColor.CYAN;
+        spawnPosition = GameDefines.SPAWN_POS_I;
+        spawnRotation = Rotation.LEFT; // Spawn on its flat side
+        position = spawnPosition;
+        rotation = spawnRotation;
     }    
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -359,6 +377,10 @@ public class TetroJuliett : Tetromino
 {
     public TetroJuliett() {
         myColor = TileColor.BLUE;
+        spawnPosition = GameDefines.SPAWN_POS_J;
+        spawnRotation = Rotation.RIGHT;
+        position = spawnPosition;
+        rotation = spawnRotation;
     }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -401,6 +423,10 @@ public class TetroLima : Tetromino
 {
     public TetroLima() {
         myColor = TileColor.ORANGE;
+        spawnPosition = GameDefines.SPAWN_POS_L;
+        spawnRotation = Rotation.RIGHT;
+        position = spawnPosition;
+        rotation = spawnRotation;
     }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -443,6 +469,10 @@ public class TetroSierra : Tetromino
 {
     public TetroSierra() {
         myColor = TileColor.GREEN;
+        spawnPosition = GameDefines.SPAWN_POS_SZ;
+        spawnRotation = Rotation.LEFT;
+        position = spawnPosition;
+        rotation = spawnRotation;
     }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -473,6 +503,10 @@ public class TetroZulu : Tetromino
 {
     public TetroZulu() {
         myColor = TileColor.RED;
+        spawnPosition = GameDefines.SPAWN_POS_SZ;
+        spawnRotation = Rotation.LEFT;
+        position = spawnPosition;
+        rotation = spawnRotation;
     }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
