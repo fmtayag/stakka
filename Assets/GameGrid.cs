@@ -31,7 +31,7 @@ public class GameGrid : MonoBehaviour
     {
         Grid = new Tile[GRID_HEIGHT, GRID_WIDTH];
         DisplayGrid = new GameObject[GRID_HEIGHT, GRID_WIDTH];
-        prefab = GameObject.Find("Image");
+        prefab = GameObject.Find("Tile");
         canvas = GameObject.Find("Canvas").transform;
 
         for(int row=0; row < GameGrid.GRID_HEIGHT; row++) {
@@ -75,12 +75,17 @@ public class GameGrid : MonoBehaviour
         {
             for (int x = 0; x < GameGrid.GRID_WIDTH; x++)
             {
-                Vector2 origPos = new Vector2(-100, -300);
+                // Gonna cheat here a little bit, and make the Tile prefab serve as the origin point
+                // Note that this assumes that Tile prefab's pivot point is x=0, y=1
+                float size = 32; // This is the size of the tile
+                float origX = prefab.GetComponent<RectTransform>().anchoredPosition.x;
+                float origY = prefab.GetComponent<RectTransform>().anchoredPosition.y;
+
+                Vector2 origPos = new Vector2(origX, -origY);
                 GameObject newImg = Instantiate(prefab, Vector3.zero, Quaternion.identity, canvas);
 
                 RectTransform rectTransform = newImg.GetComponent<RectTransform>();
                 // float size = rectTransform.rect.height;
-                float size = 32;
                 float spacing = 0;
                 float offset_y = 16;
                 rectTransform.anchoredPosition = new Vector2(
