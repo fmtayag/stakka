@@ -3,12 +3,12 @@ using UnityEngine.UI;
 
 public struct Tile {
     public TileState State { get; set; }
-    public TileColor Color { get; set; }
+    public TileColor TileColor { get; set; }
 
     public Tile(TileState state, TileColor color)
     {
         State = state;
-        Color = color;
+        TileColor = color;
     }
 };
 

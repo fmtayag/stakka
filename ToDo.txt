@@ -2,6 +2,14 @@ TODO -- As of now, most of the core mechanics are already here such as moving, l
 
 ** Doing --
 - Design the assets
+    - Tiles (DONE)
+    - Board 
+    - Background
+    - Widgets
+        - Tetro queue 
+        - Score
+        - Level 
+        - Level Progress
 
 ** TODO --
 - Tetro spawn positions

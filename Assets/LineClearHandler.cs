@@ -15,7 +15,7 @@ class LineClearHandler
             for (int col = 0; col < GameGrid.GRID_WIDTH; col++)
             {
                 grid[row, col].State = TileState.FREE;
-                grid[row, col].Color = TileColor.WHITE;
+                grid[row, col].TileColor = TileColor.WHITE;
             }
 
             // 1. Mark segments
@@ -75,7 +75,7 @@ class LineClearHandler
             int col = block.Item2;
             Debug.Log($"FREEING {row}, {col}");
             tempGrid[row, col].State = TileState.FREE;
-            tempGrid[row, col].Color = TileColor.WHITE;
+            tempGrid[row, col].TileColor = TileColor.WHITE;
 
             validCoords.Add((row, col, TileColor.WHITE)); // Fallback position
         }
@@ -92,7 +92,7 @@ class LineClearHandler
 
                 int bx = col;
                 int by = row + moveY;
-                TileColor color = currentGrid[row, col].Color; // TODO: It seems to work now...
+                TileColor color = currentGrid[row, col].TileColor; // TODO: It seems to work now...
                 
                 if (by > GameGrid.GRID_HEIGHT - 1) 
                     isBlocked = true;
