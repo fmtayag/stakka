@@ -71,7 +71,7 @@ public class GameGrid : MonoBehaviour
 
     private void CreateDisplayGrid() {
         // Create the display grid
-        for (int y = 2; y < GameGrid.GRID_HEIGHT; y++)
+        for (int y = 0; y < GameGrid.GRID_HEIGHT; y++)
         {
             for (int x = 0; x < GameGrid.GRID_WIDTH; x++)
             {
