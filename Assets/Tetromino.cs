@@ -194,22 +194,22 @@ public abstract class Tetromino
         }
 
         // Hack fix to prevent tetro piece sticking to walls
-        for (int row = 0; row < BLOCKS_COUNT; row++)
-        {
-            int bx = blocks[row, 0];
-            int by = blocks[row, 1];
-            isBlocked = false;
+        // for (int row = 0; row < BLOCKS_COUNT; row++)
+        // {
+        //     int bx = blocks[row, 0];
+        //     int by = blocks[row, 1];
+        //     isBlocked = false;
 
-            // -- Check 1: Check if block in new pos is outside the grid
-            if (
-                newXPos + bx < 0 || newXPos + bx > GameGrid.GRID_WIDTH - 1 ||
-                newYPos + by < 0 || newYPos + by > GameGrid.GRID_HEIGHT - 1
-            )
-            {
-                velocity.x = 0;
-                newXPos = currentXPos + (int) velocity.x;
-            }
-        }
+        //     // -- Check 1: Check if block in new pos is outside the grid
+        //     if (
+        //         newXPos + bx < 0 || newXPos + bx > GameGrid.GRID_WIDTH - 1 ||
+        //         newYPos + by < 0 || newYPos + by > GameGrid.GRID_HEIGHT - 1
+        //     )
+        //     {
+        //         velocity.x = 0;
+        //         newXPos = currentXPos + (int) velocity.x;
+        //     }
+        // }
 
         // 2. Perform checks
         for (int row = 0; row < BLOCKS_COUNT; row++)

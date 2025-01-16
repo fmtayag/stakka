@@ -3,8 +3,8 @@ TODO -- As of now, most of the core mechanics are already here such as moving, l
 ** Doing --
 - Tetro spawn positions
     - Spawn at the topmost (DONE)
-    - IDEA: Ceiling buffer as a last resort when spawning. 
-    If it gets overflowed, then the game is over (DISCARD: no time, and it might introduce bugs) 
+    - (DISCARD) Ceiling buffer as a last resort when spawning. If it gets overflowed, then the game is over
+- Checking of game over
 
 - Design the assets
     - Tiles (DONE)
@@ -17,8 +17,6 @@ TODO -- As of now, most of the core mechanics are already here such as moving, l
         - Level Progress
 
 ** TODO --
-
-- Checking of game over
 - No tetro queue, yet
     - bagging system: provide a bag of 7 tetro 
     - after that is used up, provide another bag of 7 tetro

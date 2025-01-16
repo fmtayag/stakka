@@ -7,10 +7,10 @@ class GameInputNew {
     float keyLeftTimer  = 0f;
     float keyRightTimer  = 0f;
     float keyDownTimer = 0f;
-
     const float keyHoldDelay = 0.3f;
     const float keyRepeatRate = 0.25f;
-
+    const float keyDownHoldDelay = 0.2f;
+    const float keyDownRepeatRate = 0.15f;
     float gravityTimer;
     private float _gravityDelay;
     public float GravityDelay
@@ -25,21 +25,11 @@ class GameInputNew {
         }
     }
     bool canLock = false;
-
-    const float initInputDelay = 0.6f;
-    const float fastInputDelay = 0.05f;
-    float inputDelay = initInputDelay;
-    float inputTimer;
-
-    float inputVertDelay = initInputDelay;
-    float inputVertTimer;
     bool isHardDropping = false;
 
     public GameInputNew () {
         gravityTimer = Time.time;
         GravityDelay = GameDefines.DEFAULT_GRAVITY_DELAY;
-        inputTimer = 0;
-        inputVertTimer = 0;
     }
 
     public void GetInput(GameGrid gameGrid, Tetromino tetro)
@@ -106,12 +96,12 @@ class GameInputNew {
             canLock = true;
         }
         if (Input.GetKey(KeyCode.DownArrow)) {
-            if (now - keyDownTimer >= keyHoldDelay)
+            if (now - keyDownTimer >= keyDownHoldDelay)
             {
                 velocity.y = 1;
-                keyDownTimer = now - keyRepeatRate;
+                keyDownTimer = now - keyDownRepeatRate;
                 // gravityTimer -= 0.1f; // NOTE: Not sure about this one's necessity hmm
-                canLock = true;
+                // canLock = true;
             }
         }
 
@@ -131,8 +121,8 @@ class GameInputNew {
         // Automatically go down after some specified time
         float now = Time.time;
         
-        bool lockedByInput = canLock;
-        if (now - gravityTimer >= GravityDelay || lockedByInput)
+        // bool lockedByInput = canLock;
+        if (now - gravityTimer >= GravityDelay)
         {
             velocity.y = 1; 
             gravityTimer = now;
