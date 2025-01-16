@@ -1,5 +1,16 @@
 using UnityEngine;
 
+public enum TileColor {
+    RED,
+    GREEN,
+    BLUE,
+    YELLOW,
+    ORANGE,
+    CYAN,
+    PURPLE,
+    WHITE,
+}
+
 public struct GameDefines {
     public static int SCORE_PER_ROW_CLEARED = 10; 
     public static int ROWS_NEEDED_FOR_LEVEL_ADVANCE = 12;

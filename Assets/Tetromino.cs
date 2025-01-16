@@ -7,7 +7,7 @@ public enum Rotation
 
 public abstract class Tetromino
 {
-    public Color myColor = Color.magenta;
+    public TileColor myColor = TileColor.RED;
     public Rotation rotation = Rotation.LEFT;
     public Vector3 position = new Vector3(5, 5); // TODO: Test
     public void Rotate(Tile[,] currentGrid) {
@@ -153,7 +153,7 @@ public abstract class Tetromino
                 int bx = (int) position.x + GetBlocks(rotation)[col, 0];
                 int by = (int) position.y + GetBlocks(rotation)[col, 1];
 
-                currentGrid[by, bx] = new Tile(TileState.FREE, Color.white);
+                currentGrid[by, bx] = new Tile(TileState.FREE, TileColor.WHITE);
             }
             // -- Apply the new rotation
             rotation = newRotation;
@@ -186,7 +186,7 @@ public abstract class Tetromino
             // TODO: Add check if newGrid tile is already PLACED??
             // Note: ^^^ Seems unnecessary. Will keep this note just to remind me
             // ... if things go south
-            newGrid[currentYPos+by, currentXPos+bx] = new Tile(TileState.FREE, Color.white);
+            newGrid[currentYPos+by, currentXPos+bx] = new Tile(TileState.FREE, TileColor.WHITE);
         }
 
         // 2. Perform checks
@@ -268,7 +268,7 @@ public abstract class Tetromino
 public class TetroTango : Tetromino
 {
     public TetroTango() {
-        myColor = GameDefines.COLOR_TANGO;
+        myColor = TileColor.PURPLE;
     }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -311,7 +311,7 @@ public class TetroTango : Tetromino
 public class TetroOscar : Tetromino
 {
     public TetroOscar() {
-        myColor = GameDefines.COLOR_OSCAR;
+        myColor = TileColor.YELLOW;
     }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -327,7 +327,7 @@ public class TetroOscar : Tetromino
 public class TetroIndia : Tetromino
 {
     public TetroIndia() {
-        myColor = GameDefines.COLOR_INDIA;
+        myColor = TileColor.CYAN;
     }    
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -358,7 +358,7 @@ public class TetroIndia : Tetromino
 public class TetroJuliett : Tetromino
 {
     public TetroJuliett() {
-        myColor = GameDefines.COLOR_JULIETT;
+        myColor = TileColor.BLUE;
     }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -400,7 +400,7 @@ public class TetroJuliett : Tetromino
 public class TetroLima : Tetromino
 {
     public TetroLima() {
-        myColor = GameDefines.COLOR_LIMA;
+        myColor = TileColor.ORANGE;
     }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -442,7 +442,7 @@ public class TetroLima : Tetromino
 public class TetroSierra : Tetromino
 {
     public TetroSierra() {
-        myColor = GameDefines.COLOR_SIERRA;
+        myColor = TileColor.GREEN;
     }
     public override int[,] GetBlocks(Rotation on_rotation)
     {
@@ -472,7 +472,7 @@ public class TetroSierra : Tetromino
 public class TetroZulu : Tetromino
 {
     public TetroZulu() {
-        myColor = GameDefines.COLOR_ZULU;
+        myColor = TileColor.RED;
     }
     public override int[,] GetBlocks(Rotation on_rotation)
     {

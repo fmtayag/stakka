@@ -15,7 +15,7 @@ class LineClearHandler
             for (int col = 0; col < GameGrid.GRID_WIDTH; col++)
             {
                 grid[row, col].State = TileState.FREE;
-                grid[row, col].Color = Color.white;
+                grid[row, col].Color = TileColor.WHITE;
             }
 
             // 1. Mark segments
@@ -67,7 +67,7 @@ class LineClearHandler
     {
         // TODO: Test and debug later
         Tile[,] tempGrid = (Tile[,])currentGrid.Clone();
-        List<(int, int, Color)> validCoords = new();
+        List<(int, int, TileColor)> validCoords = new();
 
         // 1. Remove the blocks in current pos in temp grid
         foreach((int, int) block in segment) {
@@ -75,15 +75,15 @@ class LineClearHandler
             int col = block.Item2;
             Debug.Log($"FREEING {row}, {col}");
             tempGrid[row, col].State = TileState.FREE;
-            tempGrid[row, col].Color = Color.white;
+            tempGrid[row, col].Color = TileColor.WHITE;
 
-            validCoords.Add((row, col, Color.white)); // Fallback position
+            validCoords.Add((row, col, TileColor.WHITE)); // Fallback position
         }
 
         // 2. Move down by 1 block each iteration
-        List<(int, int, Color)> lastCoords = new(); // last valid coords
+        List<(int, int, TileColor)> lastCoords = new(); // last valid coords
         for(int moveY=0; moveY<GameGrid.GRID_HEIGHT; moveY++) {
-            List<(int, int, Color)> newCoords = new();
+            List<(int, int, TileColor)> newCoords = new();
             bool isBlocked = false;
 
             foreach((int, int) block in segment) {
@@ -92,7 +92,7 @@ class LineClearHandler
 
                 int bx = col;
                 int by = row + moveY;
-                Color color = currentGrid[row, col].Color; // TODO: It seems to work now...
+                TileColor color = currentGrid[row, col].Color; // TODO: It seems to work now...
                 
                 if (by > GameGrid.GRID_HEIGHT - 1) 
                     isBlocked = true;
@@ -108,18 +108,18 @@ class LineClearHandler
 
             if(isBlocked) {
                 Debug.Log("Blocked. Copying last valid coords");
-                validCoords = new List<(int, int, Color)>(lastCoords);
+                validCoords = new List<(int, int, TileColor)>(lastCoords);
                 break;
             }
             else 
-                lastCoords = new List<(int, int, Color)>(newCoords);
+                lastCoords = new List<(int, int, TileColor)>(newCoords);
         }
         
         // Place blocks in their new position, if any
-        foreach((int, int, Color) coord in validCoords) {
+        foreach((int, int, TileColor) coord in validCoords) {
             int row = coord.Item1;
             int col = coord.Item2;
-            Color color = coord.Item3;
+            TileColor color = coord.Item3;
             Debug.Log($"NEW {row}, {col}");
             tempGrid[row, col] = new Tile(TileState.PLACED, color);
         }   

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,7 +17,7 @@ public class GameController : MonoBehaviour
     int dbgIndex;
     GameControllerState myState;
     PlayerInfo pInfo;
-    public Sprite testTile; // TODO: test
+    public List<Sprite> tiles; // TODO: test
 
     // For line clearing animation
     List<int> fullRows;
@@ -133,7 +134,7 @@ public class GameController : MonoBehaviour
             {
                 for (int col = 0; col < GameGrid.GRID_WIDTH; col++)
                 {
-                    overlayGrid[row, col].Color = gameGrid.Grid[row, col].Color;
+                    overlayGrid[row, col].State = gameGrid.Grid[row, col].State;
                 }
             }
         }
@@ -144,7 +145,7 @@ public class GameController : MonoBehaviour
             {
                 for (int col = 0; col < GameGrid.GRID_WIDTH; col++)
                 {
-                    overlayGrid[row, col].Color = Color.white;
+                    overlayGrid[row, col].State = TileState.FREE;
                 }
             }
         }
@@ -159,20 +160,21 @@ public class GameController : MonoBehaviour
             for (int x = 0; x < GameGrid.GRID_WIDTH; x++)
             {
                 Tile tile = grid[y, x];
+                TileColor color = gameGrid.Grid[y, x].Color;
+
                 switch (tile.State)
                 {
                     case TileState.FREE:
                         gameGrid.DisplayGrid[y, x].GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
-                        // gameGrid.DisplayGrid[y, x].GetComponent<Image>().sprite = null;
+                        gameGrid.DisplayGrid[y, x].GetComponent<Image>().sprite = null;
                         break;
                     case TileState.BLOCK:
-                        gameGrid.DisplayGrid[y, x].GetComponent<Image>().color = tile.Color;
-                        // gameGrid.DisplayGrid[y, x].GetComponent<Image>().sprite = testTile;
+                        // gameGrid.DisplayGrid[y, x].GetComponent<Image>().color = tile.Color;
+                        gameGrid.DisplayGrid[y, x].GetComponent<Image>().sprite = MatchColors(color);
 
                         break;
                     case TileState.PLACED:
-                        gameGrid.DisplayGrid[y, x].GetComponent<Image>().color = tile.Color;
-                        // gameGrid.DisplayGrid[y, x].GetComponent<Image>().sprite = testTile;
+                        gameGrid.DisplayGrid[y, x].GetComponent<Image>().sprite = MatchColors(color);
                         
                         
                         break;
@@ -180,6 +182,30 @@ public class GameController : MonoBehaviour
                         break;
                 }
             }
+        }
+    }
+
+    Sprite MatchColors(TileColor color) {
+
+        switch(color) {
+            case TileColor.RED:
+                return tiles[0];
+            case TileColor.GREEN:
+                return tiles[1];
+            case TileColor.BLUE:
+                return tiles[2];
+            case TileColor.YELLOW:
+                return tiles[3];
+            case TileColor.ORANGE:
+                return tiles[4];
+            case TileColor.CYAN:
+                return tiles[5];
+            case TileColor.PURPLE:
+                return tiles[6];
+            case TileColor.WHITE:
+                return null; // TODO
+            default:
+                return tiles[0]; // TODO
         }
     }
 }

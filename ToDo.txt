@@ -16,6 +16,7 @@ TODO -- As of now, most of the core mechanics are already here such as moving, l
     - a drop target box
 - Bug fixing:
     - BUG02: Tetro sometimes "sticks" to the walls or other blocks, and is not affected by gravity
+        Probably just best to rework the entire input system since it's kind of convoluted
 
 ** Done/Discard --
 - (FIXED) BUG01: Tetro is "hard dropped" when there is more than one consecutive line clear 
