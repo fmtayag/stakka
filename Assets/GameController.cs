@@ -49,7 +49,8 @@ public class GameController : MonoBehaviour
             new TetroSierra(),
             new TetroZulu()
         };
-        tetro = myTetros[indexBag[index]];
+        // tetro = myTetros[indexBag[index]];
+        tetro = myTetros[3];
         gameInput = new();
         myState = GameControllerState.PLAYING;
         fullRows = new();

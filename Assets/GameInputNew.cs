@@ -46,6 +46,7 @@ class GameInputNew {
     {
         velocity = Vector2.zero;
         float now = Time.time;
+        canLock = false;
 
         // -- Horizontal movement
         // ---- LEFT
@@ -102,12 +103,15 @@ class GameInputNew {
             Debug.Log("Pressed 'Down' key");
             velocity.y = 1;
             keyDownTimer = now;
+            canLock = true;
         }
         if (Input.GetKey(KeyCode.DownArrow)) {
             if (now - keyDownTimer >= keyHoldDelay)
             {
                 velocity.y = 1;
                 keyDownTimer = now - keyRepeatRate;
+                // gravityTimer -= 0.1f; // NOTE: Not sure about this one's necessity hmm
+                canLock = true;
             }
         }
 
@@ -124,20 +128,25 @@ class GameInputNew {
 
     public void PlaceTetro(GameGrid gameGrid, Tetromino tetro)
     {
+        // Automatically go down after some specified time
+        float now = Time.time;
+        
+        bool lockedByInput = canLock;
+        if (now - gravityTimer >= GravityDelay || lockedByInput)
+        {
+            velocity.y = 1; 
+            gravityTimer = now;
+            canLock = true;
+            gameGrid.Grid = tetro.LockTetro(gameGrid.Grid, velocity, canLock);
+        }
 
-        gameGrid.Grid = tetro.Move(gameGrid.Grid, velocity, canLock);
+        gameGrid.Grid = tetro.Move(gameGrid.Grid, velocity);
 
-        // // Automatically go down after some specified time
-        // float now = Time.time;
-
-        // if (now - gravityTimer >= GravityDelay)
-        // {
-        //     // axisVerti = 1;
-        //     axisVerti = 0;
-        //     gravityTimer = now;
-        //     canLock = true;
+        // if(velocity != Vector2.zero) {
+        //     // gameGrid.Grid = tetro.Move(gameGrid.Grid, velocity);
+        //     // gameGrid.Grid = tetro.LockTetro(gameGrid.Grid, velocity, canLock);
         // }
-
+        
         // if (a|| isHardDropping)
         // {
         //     if (!isHardDropping) 
@@ -172,6 +181,7 @@ class GameInputNew {
             myTetro.Add((by, bx));
         }
 
+        // We're gonna reuse the MoveSegmentDown from the line clear handler since it does the same thing anyway
         gameGrid.Grid = LineClearHandler.MoveSegmentDown(gameGrid.Grid, myTetro);
 
         isHardDropping = false;

@@ -164,23 +164,23 @@ public abstract class Tetromino
             if(wallkickDirection != 0) position.x += wallkickDirection; 
         }
     }
-    public Tile[,] Move(Tile[,] currentGrid, Vector2 velocity, bool canLock)
+    public Tile[,] Move(Tile[,] currentGrid, Vector2 velocity)
     {
         /* 
         Purpose: Check if tetro is not blocked, if not then return the new grid with the tetro in the new position
         ... or with the tetro locked in place
         */
-        int axisHori = (int) velocity.x;
-        int axisVerti = (int) velocity.y;
         int currentXPos = (int)position.x;
         int currentYPos = (int)position.y;
-        int newXPos = currentXPos + axisHori;
-        int newYPos = currentYPos + axisVerti;
+        int newXPos = currentXPos + (int) velocity.x;
+        int newYPos = currentYPos + (int) velocity.y;
         bool isBlocked = false;
-        bool isLocked = false;
+        // bool isLocked = false;
         Tile[,] newGrid = (Tile[,])currentGrid.Clone();
         int[,] blocks = GetBlocks(rotation);
         const int BLOCKS_COUNT = 4;
+
+        Debug.Log($"Velocity: ({velocity.x}, {velocity.y})");
 
         // 1. Remove the blocks in current position
         for(int row=0; row<BLOCKS_COUNT; row++) {
@@ -193,13 +193,32 @@ public abstract class Tetromino
             newGrid[currentYPos+by, currentXPos+bx] = new Tile(TileState.FREE, TileColor.WHITE);
         }
 
+        // Hack fix to prevent tetro piece sticking to walls
+        for (int row = 0; row < BLOCKS_COUNT; row++)
+        {
+            int bx = blocks[row, 0];
+            int by = blocks[row, 1];
+            isBlocked = false;
+
+            // -- Check 1: Check if block in new pos is outside the grid
+            if (
+                newXPos + bx < 0 || newXPos + bx > GameGrid.GRID_WIDTH - 1 ||
+                newYPos + by < 0 || newYPos + by > GameGrid.GRID_HEIGHT - 1
+            )
+            {
+                velocity.x = 0;
+                newXPos = currentXPos + (int) velocity.x;
+            }
+        }
+
         // 2. Perform checks
         for (int row = 0; row < BLOCKS_COUNT; row++)
         {
             int bx = blocks[row, 0];
             int by = blocks[row, 1];
+            isBlocked = false;
 
-            // -- Check 1: Check if block in new pos is within the grid
+            // -- Check 1: Check if block in new pos is outside the grid
             if (
                 newXPos + bx < 0 || newXPos + bx > GameGrid.GRID_WIDTH - 1 ||
                 newYPos + by < 0 || newYPos + by > GameGrid.GRID_HEIGHT - 1
@@ -215,17 +234,19 @@ public abstract class Tetromino
             }
 
             // Check 3: Is able to lock, provided there is no horizontal movement
-            if (axisHori == 0) {
-                if (newYPos + by > GameGrid.GRID_HEIGHT - 1 || newGrid[newYPos + by, newXPos + bx].State == TileState.PLACED){
-                    isLocked = true;
-                }
-            }
+            // if (axisHori == 0) {
+            //     if (newYPos + by > GameGrid.GRID_HEIGHT - 1 || newGrid[newYPos + by, newXPos + bx].State == TileState.PLACED){
+            //         isLocked = true;
+            //     }
+            // }
 
-            // Check 4: If not blocked, then place the current block in the new location
+            // Check 3: If not blocked, then place the current block in the new location
+            
             if(!isBlocked) {
                 newGrid[newYPos + by, newXPos + bx] = new Tile(TileState.BLOCK, myColor);
             }
             else {
+                // Else, go back to the original grid's state
                 // Note: I'm a bit iffy about this. Cloning seems like a waste of resources
                 newGrid = (Tile[,])currentGrid.Clone();
                 break;
@@ -234,22 +255,22 @@ public abstract class Tetromino
         }
 
         // 3. If locked, convert the blocks to TileState.PLACED
-        if(isLocked && canLock) {
-            for (int row = 0; row < BLOCKS_COUNT; row++)
-            {
-                int bx = blocks[row, 0];
-                int by = blocks[row, 1];
+        // if(isLocked && canLock) {
+        //     for (int row = 0; row < BLOCKS_COUNT; row++)
+        //     {
+        //         int bx = blocks[row, 0];
+        //         int by = blocks[row, 1];
 
-                if(isBlocked) {
-                    newGrid[currentYPos + by, currentXPos + bx] = new Tile(TileState.PLACED, myColor);
-                }
-                else {
-                    newGrid[newYPos + by, newXPos + bx] = new Tile(TileState.PLACED, myColor);
-                }
-            }
+        //         if(isBlocked) {
+        //             newGrid[currentYPos + by, currentXPos + bx] = new Tile(TileState.PLACED, myColor);
+        //         }
+        //         else {
+        //             newGrid[newYPos + by, newXPos + bx] = new Tile(TileState.PLACED, myColor);
+        //         }
+        //     }
 
-            return (Tile[,])newGrid.Clone();
-        }
+        //     return (Tile[,])newGrid.Clone();
+        // }
 
         // 4. Return the grid
         if (isBlocked) 
@@ -263,8 +284,74 @@ public abstract class Tetromino
             
     }
 
+    public Tile[,] LockTetro(Tile[,] currentGrid, Vector2 velocity, bool canLock) {
+        int currentXPos = (int) position.x;
+        int currentYPos = (int) position.y;
+        int newXPos = currentXPos;
+        int newYPos = currentYPos + 1;
+        bool isBlocked = false;
+        Tile[,] newGrid = (Tile[,])currentGrid.Clone();
+        int[,] blocks = GetBlocks(rotation);
+        const int BLOCKS_COUNT = 4;
+
+         for (int row = 0; row < BLOCKS_COUNT; row++)
+        {
+            // Debug.Log(row);
+            int bx = blocks[row, 0];
+            int by = blocks[row, 1];
+
+            bool isOnFloor = newYPos + by > GameGrid.GRID_HEIGHT - 1;
+            bool collidesWithBlock;
+            try { // This is a lazy hack but I'm too lazy to implement something proper
+                collidesWithBlock = newGrid[newYPos + by, newXPos + bx].State == TileState.PLACED;
+            }
+            catch {
+                isBlocked = true;
+                break;
+            }
+
+            if (isOnFloor || collidesWithBlock){
+                isBlocked = true;
+                break;
+            }
+            else {
+                isBlocked = false;
+            }
+        }
+
+        // Debug.Log($"isLocked {isBlocked} canLock {canLock}");
+
+        if(isBlocked && canLock) {
+            // Debug.Log("Locking");
+            for (int row = 0; row < BLOCKS_COUNT; row++)
+            {
+                int bx = blocks[row, 0];
+                int by = blocks[row, 1];
+
+                newGrid[currentYPos + by, currentXPos + bx] = new Tile(TileState.PLACED, myColor);
+
+
+                // if(isBlocked) {
+                //     newGrid[currentYPos + by, currentXPos + bx] = new Tile(TileState.PLACED, myColor);
+                // }
+                // else {
+                //     newGrid[newYPos + by, newXPos + bx] = new Tile(TileState.PLACED, myColor);
+                // }
+            }
+
+            Reset();
+
+            return (Tile[,])newGrid.Clone();
+        }
+        else {
+            // Debug.Log("Can't lock");
+            return currentGrid;
+        }
+    }
+
     public void Reset() {
         position = spawnPosition;
+        rotation = spawnRotation;
     }
 
     abstract public int[,] GetBlocks(Rotation on_rotation);
