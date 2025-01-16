@@ -11,7 +11,7 @@ public enum GameControllerState {
 public class GameController : MonoBehaviour
 {
     GameGrid gameGrid;
-    GameInput gameInput;
+    GameInputNew gameInput;
     Tetromino tetro;
     Tetromino[] myTetros;
     int index;

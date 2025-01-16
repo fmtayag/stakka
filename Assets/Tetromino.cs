@@ -164,12 +164,14 @@ public abstract class Tetromino
             if(wallkickDirection != 0) position.x += wallkickDirection; 
         }
     }
-    public Tile[,] Move(Tile[,] currentGrid, int axisHori, int axisVerti, bool canLock)
+    public Tile[,] Move(Tile[,] currentGrid, Vector2 velocity, bool canLock)
     {
         /* 
         Purpose: Check if tetro is not blocked, if not then return the new grid with the tetro in the new position
         ... or with the tetro locked in place
         */
+        int axisHori = (int) velocity.x;
+        int axisVerti = (int) velocity.y;
         int currentXPos = (int)position.x;
         int currentYPos = (int)position.y;
         int newXPos = currentXPos + axisHori;
@@ -245,9 +247,6 @@ public abstract class Tetromino
                     newGrid[newYPos + by, newXPos + bx] = new Tile(TileState.PLACED, myColor);
                 }
             }
-
-            // TODO: 'Reset the tetromino'
-            Reset();
 
             return (Tile[,])newGrid.Clone();
         }
