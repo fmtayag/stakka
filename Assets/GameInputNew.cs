@@ -14,7 +14,7 @@ class GameInputNew {
     const float keyHoldDelay = 0.3f;
     const float keyRepeatRate = 0.25f;
     const float keyDownHoldDelay = 0.2f;
-    const float keyDownRepeatRate = 0.15f;
+    const float keyDownRepeatRate = 0.17f;
     float gravityTimer;
     private float _gravityDelay;
     public float GravityDelay
