@@ -26,13 +26,13 @@ public class GameController : MonoBehaviour
     public GameObject textProgress;
     public List<Image> tetQueue;
     public List<Sprite> tetQueueSprites;
+    List<int> currentBag;
+    List<int> nextBag;
+    List<int> WeightTable;
 
     // For line clearing animation
     List<int> fullRows;
     Tile[,] overlayGrid = new Tile[20, 10]; 
-    List<int> currentBag;
-    List<int> nextBag;
-    List<int> WeightTable;
     float timerAnim0 = 0f;
     float delayAnim0 = 0.8f;
     float timerAnim1 = 0f;
@@ -78,9 +78,7 @@ public class GameController : MonoBehaviour
         pInfo.Level = GameDefines.MIN_LEVEL;
         // gameInput.GravityDelay = GameDefines.DEFAULT_GRAVITY_DELAY - (GameDefines.GRAVITY_MULTIPLICAND * pInfo.Level);
 
-        textScore.GetComponent<TextMeshProUGUI>().text = $"Score: {pInfo.Score}";
-        textLevel.GetComponent<TextMeshProUGUI>().text = $"Level: {pInfo.Level}";
-        textProgress.GetComponent<TextMeshProUGUI>().text = $"Lines: {pInfo.LevelProgress}";
+        UpdateTextDisplays();
         textGameOver.GetComponent<TextMeshProUGUI>().text = GameDefines.TXT_NONE;
 
         UpdateTetroQueueDisplay();
@@ -122,9 +120,7 @@ public class GameController : MonoBehaviour
                     // Update gravity delay
                     gameInput.GravityDelay = GameDefines.DEFAULT_GRAVITY_DELAY - (GameDefines.GRAVITY_MULTIPLICAND * pInfo.Level);
 
-                    textScore.GetComponent<TextMeshProUGUI>().text = $"Score: {pInfo.Score}";
-                    textLevel.GetComponent<TextMeshProUGUI>().text = $"Level: {pInfo.Level}";
-                    textProgress.GetComponent<TextMeshProUGUI>().text = $"Lines: {pInfo.LevelProgress}";
+                    UpdateTextDisplays();
 
                     break;
                 }
@@ -146,6 +142,8 @@ public class GameController : MonoBehaviour
                     pInfo.Score = 0;
                     pInfo.LevelProgress = 0;
                     pInfo.Level = 0;
+                    UpdateTextDisplays();
+                    
                     break;
                 }
 
@@ -360,5 +358,11 @@ public class GameController : MonoBehaviour
                 tetQueue[i].GetComponent<Image>().rectTransform.sizeDelta = match.matchedSize;
             }
         }
+    }
+
+    void UpdateTextDisplays() {
+        textScore.GetComponent<TextMeshProUGUI>().text = $"{pInfo.Score}";
+        textLevel.GetComponent<TextMeshProUGUI>().text = $"{pInfo.Level}";
+        textProgress.GetComponent<TextMeshProUGUI>().text = $"{pInfo.LevelProgress}";
     }
 }
