@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
@@ -19,12 +20,18 @@ public class GameController : MonoBehaviour
     GameControllerState myState;
     PlayerInfo pInfo;
     public List<Sprite> tiles; // TODO: test
-    public GameObject gameOverText;
+    public GameObject textGameOver;
+    public GameObject textScore;
+    public GameObject textLevel;
+    public GameObject textProgress;
+    public List<Image> tetQueue;
+    public List<Sprite> tetQueueSprites;
 
     // For line clearing animation
     List<int> fullRows;
     Tile[,] overlayGrid = new Tile[20, 10]; 
     List<int> indexBag;
+    List<int> nextBag;
     float timerAnim0 = 0f;
     float delayAnim0 = 0.8f;
     float timerAnim1 = 0f;
@@ -36,10 +43,11 @@ public class GameController : MonoBehaviour
     {
         GameObject obj = new GameObject("GameGridObject");
         gameGrid = obj.AddComponent<GameGrid>();
-        gameOverText = GameObject.Find("GameOverText");
-
+        
+        nextBag = new List<int>{0, 1, 2, 3, 4, 5, 6};
         indexBag = new List<int>{0, 1, 2, 3, 4, 5, 6};
         indexBag.Shuffle();
+        nextBag.Shuffle();
         index = 0;
         
         myTetros = new Tetromino[] {
@@ -61,7 +69,12 @@ public class GameController : MonoBehaviour
         pInfo.Level = GameDefines.MIN_LEVEL;
         // gameInput.GravityDelay = GameDefines.DEFAULT_GRAVITY_DELAY - (GameDefines.GRAVITY_MULTIPLICAND * pInfo.Level);
 
-        gameOverText.GetComponent<TextMeshProUGUI>().text = GameDefines.TXT_NONE;
+        textScore.GetComponent<TextMeshProUGUI>().text = $"Score: {pInfo.Score}";
+        textLevel.GetComponent<TextMeshProUGUI>().text = $"Level: {pInfo.Level}";
+        textProgress.GetComponent<TextMeshProUGUI>().text = $"Lines: {pInfo.LevelProgress}";
+        textGameOver.GetComponent<TextMeshProUGUI>().text = GameDefines.TXT_NONE;
+
+        UpdateTetroQueueDisplay();
     }
 
     void Update()
@@ -100,6 +113,10 @@ public class GameController : MonoBehaviour
                     // Update gravity delay
                     gameInput.GravityDelay = GameDefines.DEFAULT_GRAVITY_DELAY - (GameDefines.GRAVITY_MULTIPLICAND * pInfo.Level);
 
+                    textScore.GetComponent<TextMeshProUGUI>().text = $"Score: {pInfo.Score}";
+                    textLevel.GetComponent<TextMeshProUGUI>().text = $"Level: {pInfo.Level}";
+                    textProgress.GetComponent<TextMeshProUGUI>().text = $"Lines: {pInfo.LevelProgress}";
+
                     break;
                 }
                 else {
@@ -112,10 +129,14 @@ public class GameController : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.Space)) {
                     myState = GameControllerState.PLAYING;
-                    gameOverText.GetComponent<TextMeshProUGUI>().text = GameDefines.TXT_NONE;
+                    textGameOver.GetComponent<TextMeshProUGUI>().text = GameDefines.TXT_NONE;
                     gameGrid.ResetGrid();
                     gameInput.Reset();
                     ResetTetro();
+
+                    pInfo.Score = 0;
+                    pInfo.LevelProgress = 0;
+                    pInfo.Level = 0;
                     break;
                 }
 
@@ -230,6 +251,45 @@ public class GameController : MonoBehaviour
         }
     }
 
+    (Sprite matchedSprite, Vector2 matchedSize) MatchQueueSprites(TileColor color) {
+        // TODO: This is a bit redundant
+
+        Sprite matchedSprite = null;
+        switch(color) {
+            case TileColor.RED:
+                matchedSprite = tetQueueSprites[0];
+                break;
+            case TileColor.GREEN:
+                matchedSprite = tetQueueSprites[1];
+                break;
+            case TileColor.BLUE:
+                matchedSprite = tetQueueSprites[2];
+                break;
+            case TileColor.YELLOW:
+                matchedSprite = tetQueueSprites[3];
+                break;
+            case TileColor.ORANGE:
+                matchedSprite = tetQueueSprites[4];
+                break;
+            case TileColor.CYAN:
+                matchedSprite = tetQueueSprites[5];
+                break;
+            case TileColor.PURPLE:
+                matchedSprite = tetQueueSprites[6];
+                break;
+            case TileColor.WHITE:
+                matchedSprite = tetQueueSprites[0]; // TODO
+                break;
+            default:
+                matchedSprite = tetQueueSprites[0]; // TODO
+                break;
+        }
+
+        Rect matchedRect = matchedSprite.textureRect;
+
+        return (matchedSprite, new Vector2(matchedRect.width, matchedRect.height));
+    }
+
     void OnEnable()
     {
         GameInputNew.OnTetroReset += ResetTetro;
@@ -247,8 +307,8 @@ public class GameController : MonoBehaviour
         index %= indexBag.Count;
 
         if(index == 0) {
-            Debug.Log("Shuffle the bag");
-            indexBag.Shuffle();
+            indexBag = nextBag.ToList(); 
+            nextBag.Shuffle();
         }
 
         tetro = myTetros[indexBag[index]];
@@ -263,8 +323,31 @@ public class GameController : MonoBehaviour
 
             if (gameGrid.Grid[by, bx].State == TileState.PLACED) {
                 myState = GameControllerState.GAME_OVER;
-                gameOverText.GetComponent<TextMeshProUGUI>().text = GameDefines.TXT_GAMEOVER;
+                textGameOver.GetComponent<TextMeshProUGUI>().text = GameDefines.TXT_GAMEOVER;
                 break;
+            }
+        }
+
+        UpdateTetroQueueDisplay();
+    }
+
+    void UpdateTetroQueueDisplay() {
+
+        Debug.Log($"Index is {index}");
+
+        for (int i=0; i < tetQueue.Count; i++ ) {
+            int futureIndex = index+1+i;
+
+            if(futureIndex < indexBag.Count) {
+                var match = MatchQueueSprites(myTetros[indexBag[futureIndex]].myColor);
+                tetQueue[i].GetComponent<Image>().sprite = match.matchedSprite;
+                tetQueue[i].GetComponent<Image>().rectTransform.sizeDelta = match.matchedSize;
+            }
+            else {
+                int nextIndex = futureIndex - indexBag.Count;
+                var match = MatchQueueSprites(myTetros[nextBag[nextIndex]].myColor);
+                tetQueue[i].GetComponent<Image>().sprite = match.matchedSprite;
+                tetQueue[i].GetComponent<Image>().rectTransform.sizeDelta = match.matchedSize;
             }
         }
     }

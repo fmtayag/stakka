@@ -40,29 +40,7 @@ public class GameGrid : MonoBehaviour
             }
         }
 
-        for(int i=0; i < GameGrid.GRID_WIDTH; i++) {
-            Grid[19, i] = new Tile(TileState.PLACED, TileColor.RED); // TODO: Test
-            Grid[18, i] = new Tile(TileState.PLACED, TileColor.BLUE); // TODO: Test
-            Grid[17, i] = new Tile(TileState.PLACED, TileColor.GREEN); // TODO: Test
-            Grid[16, i] = new Tile(TileState.PLACED, TileColor.ORANGE); // TODO: Test
-        }
-
-        Grid[15, 7] = new Tile(TileState.FREE, TileColor.BLUE);
-        Grid[15, 6] = new Tile(TileState.FREE, TileColor.BLUE);
-
-        Grid[16, 0] = new Tile(TileState.FREE, TileColor.BLUE);
-        Grid[16, 1] = new Tile(TileState.FREE, TileColor.BLUE);
-        Grid[16, 2] = new Tile(TileState.FREE, TileColor.BLUE);
-
-        Grid[17, 0] = new Tile(TileState.FREE, TileColor.BLUE);
-        Grid[17, 1] = new Tile(TileState.FREE, TileColor.BLUE);
-        Grid[17, 6] = new Tile(TileState.FREE, TileColor.BLUE);
-        Grid[17, 7] = new Tile(TileState.FREE, TileColor.BLUE);
-
-        Grid[18, 0] = new Tile(TileState.FREE, TileColor.BLUE);
-        Grid[18, 7] = new Tile(TileState.FREE, TileColor.BLUE);
-
-        Grid[19, 0] = new Tile(TileState.FREE, TileColor.BLUE);
+        // SpawnTestGrid();
 
         CreateDisplayGrid();
     }
@@ -112,5 +90,32 @@ public class GameGrid : MonoBehaviour
                 Grid[row, col].TileColor = TileColor.WHITE;
             }
         }
+    }
+
+    public void SpawnTestGrid() {
+        // This test grid is set up to test multiple line clears
+        for(int i=0; i < GameGrid.GRID_WIDTH; i++) {
+            Grid[19, i] = new Tile(TileState.PLACED, TileColor.RED); // TODO: Test
+            Grid[18, i] = new Tile(TileState.PLACED, TileColor.BLUE); // TODO: Test
+            Grid[17, i] = new Tile(TileState.PLACED, TileColor.GREEN); // TODO: Test
+            Grid[16, i] = new Tile(TileState.PLACED, TileColor.ORANGE); // TODO: Test
+        }
+
+        Grid[15, 7] = new Tile(TileState.FREE, TileColor.BLUE);
+        Grid[15, 6] = new Tile(TileState.FREE, TileColor.BLUE);
+
+        Grid[16, 0] = new Tile(TileState.FREE, TileColor.BLUE);
+        Grid[16, 1] = new Tile(TileState.FREE, TileColor.BLUE);
+        Grid[16, 2] = new Tile(TileState.FREE, TileColor.BLUE);
+
+        Grid[17, 0] = new Tile(TileState.FREE, TileColor.BLUE);
+        Grid[17, 1] = new Tile(TileState.FREE, TileColor.BLUE);
+        Grid[17, 6] = new Tile(TileState.FREE, TileColor.BLUE);
+        Grid[17, 7] = new Tile(TileState.FREE, TileColor.BLUE);
+
+        Grid[18, 0] = new Tile(TileState.FREE, TileColor.BLUE);
+        Grid[18, 7] = new Tile(TileState.FREE, TileColor.BLUE);
+
+        Grid[19, 0] = new Tile(TileState.FREE, TileColor.BLUE);
     }
 }

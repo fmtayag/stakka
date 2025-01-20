@@ -9,13 +9,13 @@ TODO -- As of now, most of the core mechanics are already here such as moving, l
     - a drop target box
 - Design the assets
     - Tiles (DONE)
-    - Board 
+    - Board (DONE)
     - Background
-    - Widgets
-        - Tetro queue 
-        - Score
-        - Level 
-        - Level Progress
+    - Widgets (DONE)
+        - Tetro queue (DONE)
+        - Score (DONE)
+        - Level (DONE)
+        - Level Progress (DONE)
 
 ** TODO --
 - Bug hunting

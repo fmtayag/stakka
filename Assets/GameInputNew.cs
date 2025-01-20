@@ -153,6 +153,7 @@ class GameInputNew {
             Debug.Log("Doing hard drop");
             DoHardDrop(gameGrid, tetro);
             doHardDrop = false;
+            gravityTimer = Time.time;
             ResetTetro();
         }
         else {
