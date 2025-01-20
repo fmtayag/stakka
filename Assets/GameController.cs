@@ -35,7 +35,6 @@ public class GameController : MonoBehaviour
         GameObject obj = new GameObject("GameGridObject");
         gameGrid = obj.AddComponent<GameGrid>();
 
-
         indexBag = new List<int>{0, 1, 2, 3, 4, 5, 6, 7};
         indexBag.Shuffle();
         index = 0;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 class GameInputNew {
@@ -25,7 +26,7 @@ class GameInputNew {
         }
     }
     bool canLock = false;
-    bool isHardDropping = false;
+    bool doHardDrop = false;
 
     public GameInputNew () {
         gravityTimer = Time.time;
@@ -113,6 +114,10 @@ class GameInputNew {
         }
 
         // -- Hard drop
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            Debug.Log("Pressed 'Hard Drop' key");
+            doHardDrop = true;
+        }
 
     }
 
@@ -127,10 +132,25 @@ class GameInputNew {
             velocity.y = 1; 
             gravityTimer = now;
             canLock = true;
-            gameGrid.Grid = tetro.LockTetro(gameGrid.Grid, velocity, canLock);
+
+            var values = tetro.LockTetro(gameGrid.Grid, velocity, canLock);
+            gameGrid.Grid = values.grid;
+            bool doReset = values.doReset;
+
+            if(doReset) {
+                ResetTetro(tetro);
+            }
+        }
+
+        if (doHardDrop) {
+            Debug.Log("Doing hard drop");
+            DoHardDrop(gameGrid, tetro);
+            doHardDrop = false;
+            ResetTetro(tetro);
         }
 
         gameGrid.Grid = tetro.Move(gameGrid.Grid, velocity);
+
 
         // if(velocity != Vector2.zero) {
         //     // gameGrid.Grid = tetro.Move(gameGrid.Grid, velocity);
@@ -160,6 +180,11 @@ class GameInputNew {
         // }
     }
 
+    void ResetTetro(Tetromino tetro) {
+        tetro.Reset();
+        
+    }
+
     void DoHardDrop(GameGrid gameGrid, Tetromino tetro) {
         // Convert tetro into a "segment"
         List<(int, int)> myTetro = new List<(int, int)>();
@@ -173,9 +198,5 @@ class GameInputNew {
 
         // We're gonna reuse the MoveSegmentDown from the line clear handler since it does the same thing anyway
         gameGrid.Grid = LineClearHandler.MoveSegmentDown(gameGrid.Grid, myTetro);
-
-        isHardDropping = false;
-
-        tetro.Reset();
     }
 }

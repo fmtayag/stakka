@@ -284,7 +284,7 @@ public abstract class Tetromino
             
     }
 
-    public Tile[,] LockTetro(Tile[,] currentGrid, Vector2 velocity, bool canLock) {
+    public (Tile[,] grid, bool doReset) LockTetro(Tile[,] currentGrid, Vector2 velocity, bool canLock) {
         int currentXPos = (int) position.x;
         int currentYPos = (int) position.y;
         int newXPos = currentXPos;
@@ -339,13 +339,11 @@ public abstract class Tetromino
                 // }
             }
 
-            Reset();
-
-            return (Tile[,])newGrid.Clone();
+            return ((Tile[,])newGrid.Clone(), true);
         }
         else {
             // Debug.Log("Can't lock");
-            return currentGrid;
+            return (currentGrid, false);
         }
     }
 
