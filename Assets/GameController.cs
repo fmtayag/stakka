@@ -48,7 +48,7 @@ public class GameController : MonoBehaviour
         WeightTable = new List<int>{
             0, 0,       // T tetro
             1, 1,       // O tetro
-            2,       // I tetro
+            2, 2,       // I tetro
             3, 3, 3,    // J tetro
             4, 4, 4,    // L tetro
             5, 5, 5,    // S tetro
