@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public enum GameControllerState {
-    PLAYING, LINECLEAR_ANIMATION, GAME_OVER, TO_PLAY
+    PLAYING, LINECLEAR_ANIMATION, GAME_OVER
 }
 
 public class GameController : MonoBehaviour
@@ -52,7 +52,7 @@ public class GameController : MonoBehaviour
             new TetroZulu()
         };
         tetro = myTetros[indexBag[index]];
-        // tetro = myTetros[3];
+        tetro = myTetros[3];
         gameInput = new();
         myState = GameControllerState.PLAYING;
         fullRows = new();
@@ -108,11 +108,16 @@ public class GameController : MonoBehaviour
 
                 break;
             case GameControllerState.GAME_OVER:
-                Debug.Log("Game over, hoss");
+                // Debug.Log("Game over, hoss");
 
-                break;
-            case GameControllerState.TO_PLAY:
-                gameOverText.GetComponent<TextMeshProUGUI>().text = GameDefines.TXT_NONE;
+                if (Input.GetKeyDown(KeyCode.Space)) {
+                    myState = GameControllerState.PLAYING;
+                    gameOverText.GetComponent<TextMeshProUGUI>().text = GameDefines.TXT_NONE;
+                    gameGrid.ResetGrid();
+                    gameInput.Reset();
+                    ResetTetro();
+                    break;
+                }
 
                 break;
             default:
@@ -247,6 +252,7 @@ public class GameController : MonoBehaviour
         }
 
         tetro = myTetros[indexBag[index]];
+        // tetro = myTetros[2];
         tetro.Reset();
 
         // Gameover check

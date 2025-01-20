@@ -32,6 +32,10 @@ class GameInputNew {
     bool doHardDrop = false;
 
     public GameInputNew () {
+        Reset();
+    }
+
+    public void Reset() {
         gravityTimer = Time.time;
         GravityDelay = GameDefines.DEFAULT_GRAVITY_DELAY;
     }

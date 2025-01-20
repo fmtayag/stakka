@@ -1,8 +1,9 @@
 TODO -- As of now, most of the core mechanics are already here such as moving, line clearing, gravity, and rotation
 
 ** Doing --
+- Bug fixing
 - Polishing:
-    - Game over screen 
+    - Game over screen (DONE)
     - Start screen 
     - Game pausing
     - a drop target box
@@ -24,6 +25,8 @@ TODO -- As of now, most of the core mechanics are already here such as moving, l
     - BUG03: Tetro sometimes becomes invisible when rotated. Very rare bug.
 
 ** Done/Discard --
+- Bug fixing: 
+    - BUG04: I tetro is "locked" at the top of the ceiling in the first frame of a new game, when pressing the 'hard drop' button (DONE)
 - (DONE) Checking of game over
 - (DONE) Tetro spawn positions
     - Spawn at the topmost (DONE)

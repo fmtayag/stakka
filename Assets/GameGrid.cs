@@ -104,4 +104,13 @@ public class GameGrid : MonoBehaviour
             }
         }
     }
+
+    public void ResetGrid() {
+        for(int row=0; row < GameGrid.GRID_HEIGHT; row++) {
+            for (int col=0; col < GameGrid.GRID_WIDTH; col++) {
+                Grid[row, col].State = TileState.FREE; 
+                Grid[row, col].TileColor = TileColor.WHITE;
+            }
+        }
+    }
 }

@@ -100,10 +100,15 @@ class LineClearHandler
                     if (tempGrid[by, bx].State == TileState.PLACED)
                         isBlocked = true;
 
-                if (!isBlocked)
+                if (!isBlocked) {
+                    Debug.Log($"MoveY: {moveY}, {by}, {bx}");
                     newCoords.Add((by, bx, color));
-                else
+                    // Debug.Log($"Not blocked {row} {col}");
+                }
+                else {
+                    Debug.Log($"Blocked {row} {col}");
                     break;
+                }
             }
 
             if(isBlocked) {
@@ -111,8 +116,11 @@ class LineClearHandler
                 validCoords = new List<(int, int, TileColor)>(lastCoords);
                 break;
             }
-            else 
+            else {
+                Debug.Log("Not blocked. Copying to lastCoords");
                 lastCoords = new List<(int, int, TileColor)>(newCoords);
+                validCoords = new List<(int, int, TileColor)>(lastCoords);
+            }
         }
         
         // Place blocks in their new position, if any
@@ -120,7 +128,7 @@ class LineClearHandler
             int row = coord.Item1;
             int col = coord.Item2;
             TileColor color = coord.Item3;
-            // Debug.Log($"NEW {row}, {col}");
+            Debug.Log($"NEW {row}, {col}");
             tempGrid[row, col].State = TileState.PLACED;
             tempGrid[row, col].TileColor = color;
         }   
