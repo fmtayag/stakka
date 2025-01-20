@@ -215,15 +215,15 @@ public class GameController : MonoBehaviour
 
     void OnEnable()
     {
-        GameInputNew.OnTetroReset += UpdateSelectedTetro;
+        GameInputNew.OnTetroReset += ResetTetro;
     }
 
     void OnDisable()
     {
-        GameInputNew.OnTetroReset -= UpdateSelectedTetro;
+        GameInputNew.OnTetroReset -= ResetTetro;
     }
 
-    private void UpdateSelectedTetro()
+    private void ResetTetro()
     {
         Debug.Log("Update the tetro");
         index++;
@@ -236,5 +236,17 @@ public class GameController : MonoBehaviour
 
         tetro = myTetros[indexBag[index]];
         tetro.Reset();
+
+        // Gameover check
+        for (int i = 0; i < 4; i++)
+        {
+            int bx = (int)tetro.position.x + tetro.GetBlocks(tetro.rotation)[i, 0];
+            int by = (int)tetro.position.y + tetro.GetBlocks(tetro.rotation)[i, 1];
+
+            if (gameGrid.Grid[by, bx].State == TileState.PLACED) {
+                Debug.Log("Game over, hoss");
+                break;
+            }
+        }
     }
 }

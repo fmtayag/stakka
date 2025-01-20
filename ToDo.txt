@@ -1,8 +1,6 @@
 TODO -- As of now, most of the core mechanics are already here such as moving, line clearing, gravity, and rotation
 
 ** Doing --
-- Checking of game over
-
 - Design the assets
     - Tiles (DONE)
     - Board 
@@ -14,6 +12,7 @@ TODO -- As of now, most of the core mechanics are already here such as moving, l
         - Level Progress
 
 ** TODO --
+- Bug hunting
 - Polishing:
     - Game over screen 
     - Start screen 
@@ -25,6 +24,7 @@ TODO -- As of now, most of the core mechanics are already here such as moving, l
     - BUG03: Tetro sometimes becomes invisible when rotated. Very rare bug.
 
 ** Done/Discard --
+- (DONE) Checking of game over
 - (DONE) Tetro spawn positions
     - Spawn at the topmost (DONE)
     - (DISCARD) Ceiling buffer as a last resort when spawning. If it gets overflowed, then the game is over
