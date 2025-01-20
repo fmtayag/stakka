@@ -30,8 +30,9 @@ public class GameController : MonoBehaviour
     // For line clearing animation
     List<int> fullRows;
     Tile[,] overlayGrid = new Tile[20, 10]; 
-    List<int> indexBag;
+    List<int> currentBag;
     List<int> nextBag;
+    List<int> WeightTable;
     float timerAnim0 = 0f;
     float delayAnim0 = 0.8f;
     float timerAnim1 = 0f;
@@ -44,10 +45,18 @@ public class GameController : MonoBehaviour
         GameObject obj = new GameObject("GameGridObject");
         gameGrid = obj.AddComponent<GameGrid>();
         
-        nextBag = new List<int>{0, 1, 2, 3, 4, 5, 6};
-        indexBag = new List<int>{0, 1, 2, 3, 4, 5, 6};
-        indexBag.Shuffle();
+        WeightTable = new List<int>{
+            0, 0,       // T tetro
+            1, 1,       // O tetro
+            2,       // I tetro
+            3, 3, 3,    // J tetro
+            4, 4, 4,    // L tetro
+            5, 5, 5,    // S tetro
+            6, 6, 6,    // Z tetro
+        };
+        nextBag = WeightTable.ToList();
         nextBag.Shuffle();
+        currentBag = nextBag.Skip(0).Take(6).ToList();
         index = 0;
         
         myTetros = new Tetromino[] {
@@ -59,7 +68,7 @@ public class GameController : MonoBehaviour
             new TetroSierra(),
             new TetroZulu()
         };
-        tetro = myTetros[indexBag[index]];
+        tetro = myTetros[currentBag[index]];
         tetro = myTetros[3];
         gameInput = new();
         myState = GameControllerState.PLAYING;
@@ -304,14 +313,15 @@ public class GameController : MonoBehaviour
     {
         Debug.Log("Update the tetro");
         index++;
-        index %= indexBag.Count;
+        index %= currentBag.Count;
 
         if(index == 0) {
-            indexBag = nextBag.ToList(); 
+            nextBag = WeightTable.ToList();
             nextBag.Shuffle();
+            currentBag = nextBag.Skip(0).Take(6).ToList();
         }
 
-        tetro = myTetros[indexBag[index]];
+        tetro = myTetros[currentBag[index]];
         // tetro = myTetros[2];
         tetro.Reset();
 
@@ -338,13 +348,13 @@ public class GameController : MonoBehaviour
         for (int i=0; i < tetQueue.Count; i++ ) {
             int futureIndex = index+1+i;
 
-            if(futureIndex < indexBag.Count) {
-                var match = MatchQueueSprites(myTetros[indexBag[futureIndex]].myColor);
+            if(futureIndex < currentBag.Count) {
+                var match = MatchQueueSprites(myTetros[currentBag[futureIndex]].myColor);
                 tetQueue[i].GetComponent<Image>().sprite = match.matchedSprite;
                 tetQueue[i].GetComponent<Image>().rectTransform.sizeDelta = match.matchedSize;
             }
             else {
-                int nextIndex = futureIndex - indexBag.Count;
+                int nextIndex = futureIndex - currentBag.Count;
                 var match = MatchQueueSprites(myTetros[nextBag[nextIndex]].myColor);
                 tetQueue[i].GetComponent<Image>().sprite = match.matchedSprite;
                 tetQueue[i].GetComponent<Image>().rectTransform.sizeDelta = match.matchedSize;
