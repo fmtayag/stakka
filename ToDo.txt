@@ -1,13 +1,7 @@
 TODO -- As of now, most of the core mechanics are already here such as moving, line clearing, gravity, and rotation
 
 ** Doing --
-- Tetro spawn positions
-    - Spawn at the topmost (DONE)
-    - (DISCARD) Ceiling buffer as a last resort when spawning. If it gets overflowed, then the game is over
 - Checking of game over
-- No tetro queue, yet
-    - bagging system: provide a bag of 7 tetro 
-    - after that is used up, provide another bag of 7 tetro
 
 - Design the assets
     - Tiles (DONE)
@@ -31,6 +25,12 @@ TODO -- As of now, most of the core mechanics are already here such as moving, l
     - BUG03: Tetro sometimes becomes invisible when rotated. Very rare bug.
 
 ** Done/Discard --
+- (DONE) Tetro spawn positions
+    - Spawn at the topmost (DONE)
+    - (DISCARD) Ceiling buffer as a last resort when spawning. If it gets overflowed, then the game is over
+- (DONE) No tetro queue, yet
+    - bagging system: provide a bag of 7 tetro 
+    - after that is used up, provide another bag of 7 tetro
 - (DONE) Add hard drop back
 - (FIXED) BUG01: Tetro is "hard dropped" when there is more than one consecutive line clear 
 - Scoring (DONE)

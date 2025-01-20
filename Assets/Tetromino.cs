@@ -180,7 +180,7 @@ public abstract class Tetromino
         int[,] blocks = GetBlocks(rotation);
         const int BLOCKS_COUNT = 4;
 
-        Debug.Log($"Velocity: ({velocity.x}, {velocity.y})");
+        // Debug.Log($"Velocity: ({velocity.x}, {velocity.y})");
 
         // 1. Remove the blocks in current position
         for(int row=0; row<BLOCKS_COUNT; row++) {

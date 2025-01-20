@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
+using System;
 
 class GameInputNew {
+    public static event Action OnTetroReset;
+
     Vector2 velocity = Vector2.zero;
     int currentDirection = 0;
     float keyLeftTimer  = 0f;
@@ -138,7 +141,7 @@ class GameInputNew {
             bool doReset = values.doReset;
 
             if(doReset) {
-                ResetTetro(tetro);
+                ResetTetro();
             }
         }
 
@@ -146,10 +149,14 @@ class GameInputNew {
             Debug.Log("Doing hard drop");
             DoHardDrop(gameGrid, tetro);
             doHardDrop = false;
-            ResetTetro(tetro);
+            ResetTetro();
+        }
+        else {
+            // We have to separate Move() and DoHardDrop() since they both have their own 'lock the tetro' logic
+            // Doing otherwise would lead to "ghost" blocks
+            gameGrid.Grid = tetro.Move(gameGrid.Grid, velocity);
         }
 
-        gameGrid.Grid = tetro.Move(gameGrid.Grid, velocity);
 
 
         // if(velocity != Vector2.zero) {
@@ -180,9 +187,8 @@ class GameInputNew {
         // }
     }
 
-    void ResetTetro(Tetromino tetro) {
-        tetro.Reset();
-        
+    void ResetTetro() {
+        OnTetroReset?.Invoke();
     }
 
     void DoHardDrop(GameGrid gameGrid, Tetromino tetro) {

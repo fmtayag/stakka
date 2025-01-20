@@ -120,8 +120,9 @@ class LineClearHandler
             int row = coord.Item1;
             int col = coord.Item2;
             TileColor color = coord.Item3;
-            Debug.Log($"NEW {row}, {col}");
-            tempGrid[row, col] = new Tile(TileState.PLACED, color);
+            // Debug.Log($"NEW {row}, {col}");
+            tempGrid[row, col].State = TileState.PLACED;
+            tempGrid[row, col].TileColor = color;
         }   
         
         currentGrid = (Tile[,]) tempGrid.Clone();

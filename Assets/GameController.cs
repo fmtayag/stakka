@@ -35,7 +35,7 @@ public class GameController : MonoBehaviour
         GameObject obj = new GameObject("GameGridObject");
         gameGrid = obj.AddComponent<GameGrid>();
 
-        indexBag = new List<int>{0, 1, 2, 3, 4, 5, 6, 7};
+        indexBag = new List<int>{0, 1, 2, 3, 4, 5, 6};
         indexBag.Shuffle();
         index = 0;
         
@@ -48,8 +48,8 @@ public class GameController : MonoBehaviour
             new TetroSierra(),
             new TetroZulu()
         };
-        // tetro = myTetros[indexBag[index]];
-        tetro = myTetros[3];
+        tetro = myTetros[indexBag[index]];
+        // tetro = myTetros[3];
         gameInput = new();
         myState = GameControllerState.PLAYING;
         fullRows = new();
@@ -181,8 +181,6 @@ public class GameController : MonoBehaviour
                     case TileState.PLACED:
                         gameGrid.DisplayGrid[y, x].GetComponent<Image>().color = GameUtils.NormalizedColor(255, 255, 255);
                         gameGrid.DisplayGrid[y, x].GetComponent<Image>().sprite = MatchColors(spriteColor);
-                        
-                        
                         break;
                     default:
                         break;
@@ -213,5 +211,30 @@ public class GameController : MonoBehaviour
             default:
                 return tiles[0]; // TODO
         }
+    }
+
+    void OnEnable()
+    {
+        GameInputNew.OnTetroReset += UpdateSelectedTetro;
+    }
+
+    void OnDisable()
+    {
+        GameInputNew.OnTetroReset -= UpdateSelectedTetro;
+    }
+
+    private void UpdateSelectedTetro()
+    {
+        Debug.Log("Update the tetro");
+        index++;
+        index %= indexBag.Count;
+
+        if(index == 0) {
+            Debug.Log("Shuffle the bag");
+            indexBag.Shuffle();
+        }
+
+        tetro = myTetros[indexBag[index]];
+        tetro.Reset();
     }
 }
