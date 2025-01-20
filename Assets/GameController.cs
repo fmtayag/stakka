@@ -314,9 +314,9 @@ public class GameController : MonoBehaviour
         index %= currentBag.Count;
 
         if(index == 0) {
+            currentBag = nextBag.Skip(0).Take(7).ToList();
             nextBag = WeightTable.ToList();
             nextBag.Shuffle();
-            currentBag = nextBag.Skip(0).Take(6).ToList();
         }
 
         tetro = myTetros[currentBag[index]];
