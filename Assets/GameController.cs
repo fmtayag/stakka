@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public enum GameControllerState {
-    PLAYING, LINECLEAR_ANIMATION
+    PLAYING, LINECLEAR_ANIMATION, GAME_OVER, TO_PLAY
 }
 
 public class GameController : MonoBehaviour
@@ -18,6 +19,7 @@ public class GameController : MonoBehaviour
     GameControllerState myState;
     PlayerInfo pInfo;
     public List<Sprite> tiles; // TODO: test
+    public GameObject gameOverText;
 
     // For line clearing animation
     List<int> fullRows;
@@ -34,6 +36,7 @@ public class GameController : MonoBehaviour
     {
         GameObject obj = new GameObject("GameGridObject");
         gameGrid = obj.AddComponent<GameGrid>();
+        gameOverText = GameObject.Find("GameOverText");
 
         indexBag = new List<int>{0, 1, 2, 3, 4, 5, 6};
         indexBag.Shuffle();
@@ -58,6 +61,7 @@ public class GameController : MonoBehaviour
         pInfo.Level = GameDefines.MIN_LEVEL;
         // gameInput.GravityDelay = GameDefines.DEFAULT_GRAVITY_DELAY - (GameDefines.GRAVITY_MULTIPLICAND * pInfo.Level);
 
+        gameOverText.GetComponent<TextMeshProUGUI>().text = GameDefines.TXT_NONE;
     }
 
     void Update()
@@ -101,6 +105,14 @@ public class GameController : MonoBehaviour
                 else {
                     DrawLineClearAnimation();
                 }
+
+                break;
+            case GameControllerState.GAME_OVER:
+                Debug.Log("Game over, hoss");
+
+                break;
+            case GameControllerState.TO_PLAY:
+                gameOverText.GetComponent<TextMeshProUGUI>().text = GameDefines.TXT_NONE;
 
                 break;
             default:
@@ -244,7 +256,8 @@ public class GameController : MonoBehaviour
             int by = (int)tetro.position.y + tetro.GetBlocks(tetro.rotation)[i, 1];
 
             if (gameGrid.Grid[by, bx].State == TileState.PLACED) {
-                Debug.Log("Game over, hoss");
+                myState = GameControllerState.GAME_OVER;
+                gameOverText.GetComponent<TextMeshProUGUI>().text = GameDefines.TXT_GAMEOVER;
                 break;
             }
         }

@@ -19,6 +19,8 @@ public struct GameDefines {
     public static float MIN_GRAVITY_DELAY = 0.1f;
     public static int MIN_LEVEL = 1;
     public static int MAX_LEVEL = 8;
+    public static string TXT_GAMEOVER = "GAME OVER";
+    public static string TXT_NONE = "";
     
     // Tetromino colors
     public static Color COLOR_TANGO     =   GameUtils.NormalizedColor(228, 193, 249);

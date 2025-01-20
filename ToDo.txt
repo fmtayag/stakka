@@ -1,6 +1,11 @@
 TODO -- As of now, most of the core mechanics are already here such as moving, line clearing, gravity, and rotation
 
 ** Doing --
+- Polishing:
+    - Game over screen 
+    - Start screen 
+    - Game pausing
+    - a drop target box
 - Design the assets
     - Tiles (DONE)
     - Board 
@@ -13,11 +18,6 @@ TODO -- As of now, most of the core mechanics are already here such as moving, l
 
 ** TODO --
 - Bug hunting
-- Polishing:
-    - Game over screen 
-    - Start screen 
-    - Game pausing
-    - a drop target box
 - Bug fixing:
     - BUG02: Tetro sometimes "sticks" to the walls or other blocks, and is not affected by gravity
         Probably just best to rework the entire input system since it's kind of convoluted
